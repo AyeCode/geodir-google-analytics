@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory Google Analytics 2.1.1.2\n"
+"Project-Id-Version: GeoDirectory Google Analytics 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-21 13:04+0530\n"
-"PO-Revision-Date: 2021-12-21 13:04+0530\n"
+"POT-Creation-Date: 2022-02-21 12:20+0530\n"
+"PO-Revision-Date: 2022-02-21 12:20+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -21,7 +21,6 @@ msgstr ""
 #: includes/admin/admin-functions.php:26
 #: includes/admin/class-geodir-google-analytics-admin.php:89
 #: includes/admin/settings/class-geodir-settings-analytics.php:27
-#: includes/admin/settings/class-geodir-settings-analytics.php:79
 #: includes/class-geodir-google-analytics.php:239
 msgid "Google Analytics"
 msgstr ""
@@ -32,15 +31,15 @@ msgid ""
 "Google Analytics is deleted."
 msgstr ""
 
-#: includes/admin/admin-functions.php:46
+#: includes/admin/admin-functions.php:47
 msgid "Deauthorize"
 msgstr ""
 
-#: includes/admin/admin-functions.php:47
+#: includes/admin/admin-functions.php:48
 msgid "Authorized"
 msgstr ""
 
-#: includes/admin/admin-functions.php:54
+#: includes/admin/admin-functions.php:55
 msgid "Authorize"
 msgstr ""
 
