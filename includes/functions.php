@@ -424,7 +424,7 @@ function gd_renderTopCountriesChart() {
 		var data = {
 			labels: labels,
 			datasets: [{
-				label: 'Countries',
+				label: '<?php echo addslashes( __( 'Countries', 'geodir-ga' ) );?>',
 				data: values,
 				backgroundColor: bgcolors,
 				hoverOffset: 4
@@ -493,14 +493,14 @@ function gd_renderYearOverYearChart() {
 			datasets : [
 				{
 					label: '<?php _e('Last Year', 'geodir-ga');?>',
-					fillColor : "rgba(220,220,220,0.5)",
-					strokeColor : "rgba(220,220,220,1)",
+					borderColor:'rgb(255,159,64)',
+					backgroundColor:'rgba(255,159,64,0.5)',
 					data : data2
 				},
 				{
 					label: '<?php _e('This Year', 'geodir-ga');?>',
-					fillColor : "rgba(151,187,205,0.5)",
-					strokeColor : "rgba(151,187,205,1)",
+					borderColor:'rgb(54,162,235)',
+					backgroundColor:'rgba(54,162,235,0.5)',
 					data : data1
 				}
 			]
@@ -565,18 +565,14 @@ function gd_renderWeekOverWeekChart() {
 			datasets : [
 				{
 					label: '<?php _e('Last Week', 'geodir-ga');?>',
-					fillColor : "rgba(220,220,220,0.5)",
-					strokeColor : "rgba(220,220,220,1)",
-					pointColor : "rgba(220,220,220,1)",
-					pointStrokeColor : "#fff",
+					borderColor:'rgb(255,159,64)',
+					backgroundColor:'rgba(255,159,64,0.5)',
 					data : data2
 				},
 				{
 					label: '<?php _e('This Week', 'geodir-ga');?>',
-					fillColor : "rgba(151,187,205,0.5)",
-					strokeColor : "rgba(151,187,205,1)",
-					pointColor : "rgba(151,187,205,1)",
-					pointStrokeColor : "#fff",
+					borderColor:'rgb(54,162,235)',
+					backgroundColor:'rgba(54,162,235,0.5)',
 					data : data1
 				}
 			]
@@ -619,18 +615,14 @@ function gd_renderMonthOverMonthChart() {
 			datasets : [
 				{
 					label: '<?php _e('Last Month', 'geodir-ga');?>',
-					fillColor : "rgba(220,220,220,0.5)",
-					strokeColor : "rgba(220,220,220,1)",
-					pointColor : "rgba(220,220,220,1)",
-					pointStrokeColor : "#fff",
+					borderColor:'rgb(255,159,64)',
+					backgroundColor:'rgba(255,159,64,0.5)',
 					data : data2
 				},
 				{
 					label: '<?php _e('This Month', 'geodir-ga');?>',
-					fillColor : "rgba(151,187,205,0.5)",
-					strokeColor : "rgba(151,187,205,1)",
-					pointColor : "rgba(151,187,205,1)",
-					pointStrokeColor : "#fff",
+					borderColor:'rgb(54,162,235)',
+					backgroundColor:'rgba(54,162,235,0.5)',
 					data : data1
 				}
 			]

@@ -37,6 +37,9 @@ An answer to that question.
 
 == Changelog ==
 
+= 2.2.1 =
+* Graph line & bar color changed - CHANGED
+
 = 2.2 =
 * Changes to support GeoDirectory v2.2 new settings UI - CHANGED
 
