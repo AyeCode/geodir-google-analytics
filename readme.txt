@@ -3,7 +3,7 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: geodirectory, google analytics, geodirectory google analytics, tracking
 Requires at least: 4.9
-Tested up to: 5.9
+Tested up to: 6.1
 Requires PHP: 5.6
 Stable tag: 2.2
 License: GPLv3
@@ -39,6 +39,7 @@ An answer to that question.
 
 = 2.2.1 =
 * Graph line & bar color changed - CHANGED
+* Single quote in translations breaks analytics graph - FIXED
 
 = 2.2 =
 * Changes to support GeoDirectory v2.2 new settings UI - CHANGED

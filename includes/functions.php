@@ -438,7 +438,7 @@ function gd_renderTopCountriesChart() {
 }
 
 function gdga_noResults() {
-	jQuery('#gdga-chart-container').html('<p><?php _e('No results available','geodir-ga');?></p>');
+	jQuery('#gdga-chart-container').html('<p>' + geodir_ga_htmlEscape('<?php echo esc_js( __( 'No results available', 'geodir-ga' ) ); ?>') + '</p>');
 }
 
 /**
@@ -468,18 +468,18 @@ function gd_renderYearOverYearChart() {
 		var data1 = results && results[0] && results[0].rows ? results[0].rows.map(function(row) { return +row[2]; }) : [];
 		var data2 = results && results[1] && results[1].rows ? results[1].rows.map(function(row) { return +row[2]; }) : [];
 
-		var labels = ['<?php _e('Jan', 'geodir-ga');?>',
-			'<?php _e('Feb', 'geodir-ga');?>',
-			'<?php _e('Mar', 'geodir-ga');?>',
-			'<?php _e('Apr', 'geodir-ga');?>',
-			'<?php _e('May', 'geodir-ga');?>',
-			'<?php _e('Jun', 'geodir-ga');?>',
-			'<?php _e('Jul', 'geodir-ga');?>',
-			'<?php _e('Aug', 'geodir-ga');?>',
-			'<?php _e('Sep', 'geodir-ga');?>',
-			'<?php _e('Oct', 'geodir-ga');?>',
-			'<?php _e('Nov', 'geodir-ga');?>',
-			'<?php _e('Dec', 'geodir-ga');?>'];
+		var labels = [geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jan', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Feb', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Mar', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Apr', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'May', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jun', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jul', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Aug', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Sep', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Oct', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Nov', 'geodir-ga' ) ); ?>'),
+			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Dec', 'geodir-ga' ) ); ?>')];
 
 		// Ensure the data arrays are at least as long as the labels array.
 		// Chart.js bar charts don't (yet) accept sparse datasets.
@@ -492,13 +492,13 @@ function gd_renderYearOverYearChart() {
 			labels : labels,
 			datasets : [
 				{
-					label: '<?php _e('Last Year', 'geodir-ga');?>',
+					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Year', 'geodir-ga' ) ); ?>'),
 					borderColor:'rgb(255,159,64)',
 					backgroundColor:'rgba(255,159,64,0.5)',
 					data : data2
 				},
 				{
-					label: '<?php _e('This Year', 'geodir-ga');?>',
+					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Year', 'geodir-ga' ) ); ?>'),
 					borderColor:'rgb(54,162,235)',
 					backgroundColor:'rgba(54,162,235,0.5)',
 					data : data1
@@ -551,26 +551,26 @@ function gd_renderWeekOverWeekChart() {
 		?>
 
 		var labels = [
-			"<?php _e(date('D', strtotime("+1 day")),'geodir-ga'); ?>",
-			"<?php _e(date('D', strtotime("+2 day")),'geodir-ga'); ?>",
-			"<?php _e(date('D', strtotime("+3 day")),'geodir-ga'); ?>",
-			"<?php _e(date('D', strtotime("+4 day")),'geodir-ga'); ?>",
-			"<?php _e(date('D', strtotime("+5 day")),'geodir-ga'); ?>",
-			"<?php _e(date('D', strtotime("+6 day")),'geodir-ga'); ?>",
-			"<?php _e(date('D', strtotime("+7 day")),'geodir-ga'); ?>"
+			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+1 day" ) ) ); ?>"),
+			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+2 day" ) ) ); ?>"),
+			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+3 day" ) ) ); ?>"),
+			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+4 day" ) ) ); ?>"),
+			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+5 day" ) ) ); ?>"),
+			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+6 day" ) ) ); ?>"),
+			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+7 day" ) ) ); ?>")
 		];
 
 		var data = {
 			labels : labels,
 			datasets : [
 				{
-					label: '<?php _e('Last Week', 'geodir-ga');?>',
+					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Week', 'geodir-ga' ) ); ?>'),
 					borderColor:'rgb(255,159,64)',
 					backgroundColor:'rgba(255,159,64,0.5)',
 					data : data2
 				},
 				{
-					label: '<?php _e('This Week', 'geodir-ga');?>',
+					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Week', 'geodir-ga' ) ); ?>'),
 					borderColor:'rgb(54,162,235)',
 					backgroundColor:'rgba(54,162,235,0.5)',
 					data : data1
@@ -614,13 +614,13 @@ function gd_renderMonthOverMonthChart() {
 			labels : labels,
 			datasets : [
 				{
-					label: '<?php _e('Last Month', 'geodir-ga');?>',
+					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Month', 'geodir-ga' ) ); ?>'),
 					borderColor:'rgb(255,159,64)',
 					backgroundColor:'rgba(255,159,64,0.5)',
 					data : data2
 				},
 				{
-					label: '<?php _e('This Month', 'geodir-ga');?>',
+					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Month', 'geodir-ga' ) ); ?>'),
 					borderColor:'rgb(54,162,235)',
 					backgroundColor:'rgba(54,162,235,0.5)',
 					data : data1
@@ -684,6 +684,19 @@ function gdga_refresh(stop) {
 			}
 		}
 	}
+}
+
+function geodir_ga_htmlEscape(str) {
+	return String(str)
+		.replace(/&prime;/g, "'")
+		.replace(/&frasl;/g, '/')
+		.replace(/&ndash;/g, '-')
+		.replace(/&ldquo;/g, '"')
+		.replace(/&gt;/g, '>')
+		.replace(/&quot;/g, '"')
+		.replace(/&apos;/g, "'")
+		.replace(/&amp;quot;/g, '"')
+		.replace(/&amp;apos;/g, "'");
 }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
