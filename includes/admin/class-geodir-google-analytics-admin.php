@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Google_Analytics_Admin {
 
-    /**
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -27,7 +27,7 @@ class GeoDir_Google_Analytics_Admin {
 		add_filter( 'geodir_uninstall_options', 'geodir_ga_uninstall_settings', 50, 1 );
 		add_action( 'geodir_pricing_package_settings', array( $this, 'pricing_package_settings' ), 10, 3 );
 		add_action( 'geodir_pricing_process_data_for_save', array( $this, 'pricing_process_data_for_save' ), 1, 3 );
-    }
+	}
 
 	/**
 	 * Handle redirects to setup/welcome page after install and updates.
@@ -35,6 +35,11 @@ class GeoDir_Google_Analytics_Admin {
 	 * For setup wizard, transient must be present, the user must have access rights, and we must ignore the network/bulk plugin updaters.
 	 */
 	public function admin_redirects() {
+		// Save authenticate code.
+		if ( ! empty( $_GET['ga_auth_code'] ) && ! empty( $_GET['page'] ) && $_GET['page'] === 'gd-settings' && ! empty( $_GET['tab'] ) && $_GET['tab'] === 'analytics' ) {
+			$this->save_auth_code();
+		}
+
 		// Nonced plugin install redirects (whitelisted)
 		if ( ! empty( $_GET['geodir-ga-install-redirect'] ) ) {
 			$plugin_slug = geodir_clean( $_GET['geodir-ga-install-redirect'] );
@@ -57,7 +62,7 @@ class GeoDir_Google_Analytics_Admin {
 			return;
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=gd-settings&tab=ga' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=gd-settings&tab=analytics' ) );
 		exit;
 	}
 
@@ -109,5 +114,21 @@ class GeoDir_Google_Analytics_Admin {
 		}
 
 		return $package_data;
+	}
+
+	public function save_auth_code() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$auth_code = sanitize_text_field( $_GET['ga_auth_code'] );
+
+		geodir_update_option( 'ga_auth_code', $auth_code );
+		geodir_update_option( 'ga_auth_token', '' );
+		geodir_update_option( 'ga_auth_date', '' );
+		geodir_update_option( 'ga_uids', '' );
+		geodir_update_option( 'ga_account_id', '' );
+
+		wp_safe_redirect( admin_url( 'admin.php?page=gd-settings&tab=analytics' ) );
 	}
 }

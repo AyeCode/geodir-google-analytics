@@ -91,6 +91,7 @@ class GeoDir_Google_Analytics_API {
 			if ( $accessToken ) {
 				$this->client->setAccessToken( $accessToken );
 				geodir_update_option( 'ga_auth_token', $accessToken );
+				geodir_update_option( 'ga_auth_date', date( 'Y-m-d H:i:s' ) );
 			} else {
 				return false;
 			}
@@ -101,8 +102,9 @@ class GeoDir_Google_Analytics_API {
 	}
 
 	function deauthorize() {
-            geodir_update_option( 'ga_auth_code', '' );
-            geodir_update_option( 'ga_auth_token', '' );
+		geodir_update_option( 'ga_auth_code', '' );
+		geodir_update_option( 'ga_auth_token', '' );
+		geodir_update_option( 'ga_auth_date', '' );
 	}
 
 	function getSingleProfile() {

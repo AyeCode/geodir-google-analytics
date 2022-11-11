@@ -75,12 +75,6 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 		public function get_settings( $current_section = '' ) {
 			$settings = apply_filters( 'geodir_google_analytics_settings', 
 				array(
-//					array(
-//						'name' => __( 'Google Analytics', 'geodir-ga' ),
-//						'type' => 'title',
-//						'desc' => '',
-//						'id' => 'google_analytic_settings'
-//					),
 					array(
 						'name' => __( 'Google Analytic Settings', 'geodir-ga' ),
 						'type' => 'sectionstart', 
@@ -94,29 +88,18 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 						'type' => 'checkbox',
 					),
 					array(
-						'name' => __( 'Google analytics access', 'geodir-ga' ),
+						'name' => __( 'Google Authentication', 'geodir-ga' ),
 						'desc' => '',
-						'id' => 'ga_token',
+						'id' => 'ga_authentication',
 						'type' => 'google_analytics',
 						'css' => 'min-width:300px;',
 						'std' => ''
 					),
 					array(
-						'name' => __( 'Google analytics Auth Code', 'geodir-ga' ),
-						'desc' => __( 'You must save this setting before accounts will show.', 'geodir-ga' ),
-						'id' => 'ga_auth_code',
-						'type' => 'text',
-						'css' => 'min-width:300px;',
-						'std' => ''
-					),
-					array(
+						'id' => 'ga_account_id',
+						'type' => 'select',
 						'name' => __( 'Analytics Account', 'geodir-ga' ),
 						'desc' => __( 'Select the account that you setup for this site.', 'geodir-ga' ),
-						'id' => 'ga_account_id',
-						'css' => 'min-width:300px;',
-						'std' => 'gridview_onehalf',
-						'type' => 'select',
-						'class' => 'geodir-select',
 						'options' => self::analytics_accounts()
 					),
 					array(
@@ -162,16 +145,21 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 		}
 
 		public static function activation_url(){
-			return add_query_arg( 
+			$url = add_query_arg( 
 				array(
-					'next'          => admin_url( 'admin.php?page=geodirectory&active_tab=google_analytic_settings' ),
-					'scope'         => GEODIR_GA_SCOPE,
-					'response_type' => 'code',
-					'redirect_uri'  => GEODIR_GA_REDIRECT,
-					'client_id'     => GEODIR_GA_CLIENTID,
+					'client_id'       => GEODIR_GA_CLIENTID,
+					'scope'           => GEODIR_GA_SCOPE,
+					'access_type'     => 'offline',
+					'approval_prompt' => 'force',
+					'response_type'   => 'code',
+					'redirect_uri'    => urlencode( GEODIR_GA_REDIRECT ),
+					'next'            => urlencode( admin_url( 'admin.php?page=gd-settings&tab=analytics' ) ),
+					'state'           => urlencode( admin_url( 'admin.php?page=gd-settings&tab=analytics' ) ),
 				), 
-				'https://accounts.google.com/o/oauth2/auth' 
+				GEODIR_GA_OAUTH2_AUTH_URL
 			);
+
+			return $url;
 		}
 
 
@@ -209,6 +197,7 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 
 			if ( geodir_get_option( 'ga_auth_token' ) === false ) {
 				geodir_update_option( 'ga_auth_token', '' );
+				geodir_update_option( 'ga_auth_date', '' );
 			}
 
 			if ( geodir_get_option( 'ga_uids' ) && ! isset( $_POST['ga_auth_code'] ) ) {

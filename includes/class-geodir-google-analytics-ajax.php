@@ -88,6 +88,7 @@ class GeoDir_Google_Analytics_AJAX {
 		}
 
 		geodir_update_option( 'ga_auth_token', '' );
+		geodir_update_option( 'ga_auth_date', '' );
 		geodir_update_option( 'ga_auth_code', '' );
 		geodir_update_option( 'ga_uids', '' );
 		geodir_update_option( 'ga_account_id', '' );

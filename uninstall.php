@@ -34,6 +34,7 @@ if ( ( ! empty( $geodir_settings ) && ( ! empty( $geodir_settings['admin_uninsta
 			'ga_auth_code',
 			'ga_auto_refresh',
 			'ga_auth_token',
+			'ga_auth_date',
 			'ga_client_id',
 			'ga_client_secret',
 			'gd_ga_access_token',
