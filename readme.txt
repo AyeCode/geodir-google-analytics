@@ -5,7 +5,7 @@ Tags: geodirectory, google analytics, geodirectory google analytics, tracking
 Requires at least: 4.9
 Tested up to: 6.1
 Requires PHP: 5.6
-Stable tag: 2.2
+Stable tag: 2.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,12 +37,12 @@ An answer to that question.
 
 == Changelog ==
 
-= 2.2.1 =
+= 2.2.1 (2022-11-15) =
 * Graph line & bar color changed - CHANGED
 * Single quote in translations breaks analytics graph - FIXED
 * Google OAuth 2.0 authorization compatibility changes - CHANGED
 
-= 2.2 =
+= 2.2 (2022-02-22) =
 * Changes to support GeoDirectory v2.2 new settings UI - CHANGED
 
 = 2.1.1.2 =
