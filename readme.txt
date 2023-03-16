@@ -3,9 +3,9 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: geodirectory, google analytics, geodirectory google analytics, tracking
 Requires at least: 4.9
-Tested up to: 6.1
+Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 2.2.1
+Stable tag: 2.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,9 @@ An answer to that question.
 == Screenshots ==
 
 == Changelog ==
+
+= 2.3 - 2023-03-16 =
+* Changes for AUI Bootstrap 5 compatibility - ADDED
 
 = 2.2.1 (2022-11-15) =
 * Graph line & bar color changed - CHANGED

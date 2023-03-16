@@ -186,7 +186,7 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 		$defaults = array(
 			'title' => '',
 			'button_text' => '',
-			'user_roles' => array( 'owner' ),
+			'user_roles' => array( 'owner', 'administrator' ),
 			'height' => 200,
 			// AUI
 			'btn_color' => '',
@@ -210,7 +210,7 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 		 */
 		// $title = apply_filters( 'widget_title', empty( $widget_args['title'] ) ? '' : $widget_args['title'], $widget_args, $this->id_base );
 
-		$allow_roles = !empty( $options['user_roles'] ) ? $options['user_roles'] : array( 'owner' );
+		$allow_roles = !empty( $options['user_roles'] ) ? $options['user_roles'] : array( 'owner', 'administrator' );
 
 		if ( ! is_array( $allow_roles ) ) {
 			$allow_roles = explode( ",", $allow_roles );
@@ -220,6 +220,8 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 		if ( empty( $allow_roles ) ) {
 			return;
 		}
+
+		$options['user_roles'] = $allow_roles[0]; // @todo we need to make this work for arrays.
 
 		if ( ! in_array( 'all', $allow_roles ) ) {
 			if ( in_array( 'all-logged-in', $allow_roles ) ) {

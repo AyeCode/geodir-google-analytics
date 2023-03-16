@@ -72,6 +72,9 @@ class GeoDir_Google_Analytics_AJAX {
 				echo json_encode( array() );
 				geodir_error_log( wp_sprintf( __( 'GD Google Analytics API Error(%s) : %s', 'geodir-ga' ), $e->getCode(), $e->getMessage() ) );
 			}
+		} else {
+			geodir_error_log( __( 'GD Google Analytics API Error : empty stats', 'geodir-ga' ) );
+			echo json_encode( array() );
 		}
 
 		geodir_die();

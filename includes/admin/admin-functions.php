@@ -37,18 +37,18 @@ function geodir_ga_uninstall_settings( $settings ) {
 }
 
 function geodir_ga_google_analytics_field( $field ) {
-	global $gd_ga_errors;
+	global $aui_bs5, $gd_ga_errors;
 	?>
-	<div data-argument="ga_auth_token" class="form-group row">
-		<label for="ga_auth_token" class="font-weight-bold  col-sm-3 col-form-label"><?php echo $field['name'] ?></label>
+	<div data-argument="ga_auth_token" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
+		<label for="ga_auth_token" class="<?php echo ( $aui_bs5 ? 'fw-bold' : 'font-weight-bold' ); ?> col-sm-3 col-form-label"><?php echo $field['name'] ?></label>
 		<div class="col-sm-9">
 			<?php if ( geodir_get_option( 'ga_auth_token' ) ) { ?>
-				<span class="btn btn-sm btn-danger mr-2" onclick="geodir_ga_deauthorize('<?php echo wp_create_nonce( 'gd_ga_deauthorize' ); ?>');"><?php _e( 'Deauthorize', 'geodir-ga' ); ?></span>
-				<span class="text-success font-weight-bold"><i class="fas fa-check-circle"></i> <?php _e( 'Authorized', 'geodir-ga' ); ?></span>
+				<span class="btn btn-sm btn-danger <?php echo ( $aui_bs5 ? 'me-2' : 'mr-2' ); ?>" onclick="geodir_ga_deauthorize('<?php echo wp_create_nonce( 'gd_ga_deauthorize' ); ?>');"><?php _e( 'Deauthorize', 'geodir-ga' ); ?></span>
+				<span class="text-success <?php echo ( $aui_bs5 ? 'fw-bold' : 'font-weight-bold' ); ?>"><i class="fas fa-check-circle"></i> <?php _e( 'Authorized', 'geodir-ga' ); ?></span>
 				<?php if ( $auth_date = geodir_get_option( 'ga_auth_date' ) ) { ?>
-				<br><small class="form-text text-muted"><span class="description"><?php echo wp_sprintf( __( 'Last Authorized On: %s', 'geodir-ga' ), date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $auth_date ) ) ) . ' ' . date_default_timezone_get(); ?></span></small>
+				<br><small class="form-text d-block text-muted"><span class="description"><?php echo wp_sprintf( __( 'Last Authorized On: %s', 'geodir-ga' ), date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $auth_date ) ) ) . ' ' . date_default_timezone_get(); ?></span></small>
 				<?php } ?>
-				<br><small class="form-text text-muted"><span class="description"><?php _e( 'Click on Deauthorize to disconnect your Google Analytics account.', 'geodir-ga' ); ?></span></small>
+				<br><small class="form-text d-block text-muted"><span class="description"><?php _e( 'Click on Deauthorize to disconnect your Google Analytics account.', 'geodir-ga' ); ?></span></small>
 				<?php
 				if ( ! empty( $gd_ga_errors ) ) {
 					print_r( $gd_ga_errors );
@@ -56,7 +56,7 @@ function geodir_ga_google_analytics_field( $field ) {
 			} else {
 				?>
 				<a class="btn btn-sm btn-primary" href="<?php echo esc_url( GeoDir_Settings_Analytics::activation_url() ); ?>" target="_self" title="<?php esc_attr_e( 'Log in with your Google Analytics Account', 'geodir-ga' ); ?>"><?php _e( 'Log In with your Google Analytics Account', 'geodir-ga' ); ?></a>
-				<small class="form-text text-muted"><span class="description"><?php _e( 'Log in with your Google Analytics account to select analytics profile.', 'geodir-ga' ); ?></span></small>
+				<small class="form-text d-block text-muted"><span class="description"><?php _e( 'Log in with your Google Analytics account to select analytics profile.', 'geodir-ga' ); ?></span></small>
 				<?php
 			}
 			?>

@@ -73,6 +73,8 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 		 * @return array
 		 */
 		public function get_settings( $current_section = '' ) {
+			$accounts = self::analytics_accounts();
+
 			$settings = apply_filters( 'geodir_google_analytics_settings', 
 				array(
 					array(
@@ -99,8 +101,9 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 						'id' => 'ga_account_id',
 						'type' => 'select',
 						'name' => __( 'Analytics Account', 'geodir-ga' ),
+						'placeholder' => ( ! empty( $accounts ) ? __( 'Select Account', 'geodir-ga' ) : __( 'Log-In to select account', 'geodir-ga' ) ),
 						'desc' => __( 'Select the account that you setup for this site.', 'geodir-ga' ),
-						'options' => self::analytics_accounts()
+						'options' => $accounts
 					),
 					array(
 						'name' => __( 'Add tracking code to site?', 'geodir-ga' ),
