@@ -77,7 +77,6 @@ class GeoDir_Google_Analytics {
 		$this->define( 'GEODIR_GA_CLIENTID', '160776539703-k9sdbacijmo233u2p4vj7gjcrfh7iro2.apps.googleusercontent.com' ); // Client ID
 		$this->define( 'GEODIR_GA_CLIENTSECRET', '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' ); // Client secret
 		$this->define( 'GEODIR_GA_REDIRECT', 'https://ayecode.io/wp-json/ayecode/v1/oauth2gacallback/' ); // Authorised redirect URI
-
 		$this->define( 'GEODIR_GA_OAUTH2_AUTH_URL', 'https://accounts.google.com/o/oauth2/auth' ); // OAuth 2.0 auth URI
 		$this->define( 'GEODIR_GA_SCOPE', 'https://www.googleapis.com/auth/analytics.readonly' ); // analytics.readonly
 	}

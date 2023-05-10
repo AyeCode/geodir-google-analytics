@@ -126,8 +126,12 @@ class GeoDir_Google_Analytics_Admin {
 		geodir_update_option( 'ga_auth_code', $auth_code );
 		geodir_update_option( 'ga_auth_token', '' );
 		geodir_update_option( 'ga_auth_date', '' );
-		geodir_update_option( 'ga_uids', '' );
+		geodir_update_option( 'ga_properties', '' );
+		geodir_update_option( 'ga_data_stream', '' );
+		geodir_update_option( 'ga_profile_view', '' );
 		geodir_update_option( 'ga_account_id', '' );
+		geodir_update_option( 'ga_measurement_id', '' );
+		geodir_update_option( 'ga_data_streams', '' );
 
 		wp_safe_redirect( admin_url( 'admin.php?page=gd-settings&tab=analytics' ) );
 	}

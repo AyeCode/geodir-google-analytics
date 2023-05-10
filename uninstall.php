@@ -43,6 +43,11 @@ if ( ( ! empty( $geodir_settings ) && ( ! empty( $geodir_settings['admin_uninsta
 			'ga_stats',
 			'ga_tracking_code',
 			'ga_uids',
+			'ga_properties',
+			'ga_data_stream',
+			'ga_measurement_id',
+			'ga_data_streams',
+			'ga_profile_view',
 			'geodir_disable_google_analytics_section',
 			'uninstall_geodir_google_analytics',
 		);

@@ -37,15 +37,18 @@ An answer to that question.
 
 == Changelog ==
 
+= 2.3.1 =
+* Google Analytics 4 compatibility - ADDED
+
 = 2.3 - 2023-03-16 =
 * Changes for AUI Bootstrap 5 compatibility - ADDED
 
-= 2.2.1 (2022-11-15) =
+= 2.2.1 - 2022-11-15 =
 * Graph line & bar color changed - CHANGED
 * Single quote in translations breaks analytics graph - FIXED
 * Google OAuth 2.0 authorization compatibility changes - CHANGED
 
-= 2.2 (2022-02-22) =
+= 2.2 - 2022-02-22 =
 * Changes to support GeoDirectory v2.2 new settings UI - CHANGED
 
 = 2.1.1.2 =

@@ -73,14 +73,24 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 		 * @return array
 		 */
 		public function get_settings( $current_section = '' ) {
-			$accounts = self::analytics_accounts();
+			$accounts = self::get_property_options();
+			$data_streams = ! empty( $accounts ) ? self::get_data_streams_options() : array();
+
+			if ( ! empty( $data_streams ) && ! geodir_get_option( 'ga_measurement_id' ) ) {
+				$_data_streams = array_keys( $data_streams );
+
+				if ( ! empty( $_data_streams[0] ) ) {
+					geodir_update_option( 'ga_measurement_id', $_data_streams[0] );
+				}
+			}
 
 			$settings = apply_filters( 'geodir_google_analytics_settings', 
 				array(
 					array(
-						'name' => __( 'Google Analytic Settings', 'geodir-ga' ),
+						'name' => __( 'Google Analytics Settings', 'geodir-ga' ),
 						'type' => 'sectionstart', 
-						'id' => 'google_analytic_settings'
+						'id' => 'google_analytic_settings',
+						'desc' => aui()->alert( array( 'type'=> 'info', 'content'=> __( '<b>Google Analytics 4</b> is replacing <b>Universal Analytics</b>. On July 1, 2023 all standard Universal Analytics properties will stop processing data.<p class="mb-0">It\'s critical that you migrate your Universal Analytics property settings to <b><a href="https://support.google.com/analytics/answer/10089681" rel="noopener" target="_blank">Google Analytics 4</a></b>, or you will begin to lose data on July 1, 2023. <b><a href="https://support.google.com/analytics/answer/10759417" rel="noopener" target="_blank">Learn how</a></b> to migrate your settings from UA to GA4.</p>', 'geodir-ga' ) ) ),
 					),
 					array(
 						'name' => __( 'Enable output widget?', 'geodir-ga' ),
@@ -100,10 +110,18 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 					array(
 						'id' => 'ga_account_id',
 						'type' => 'select',
-						'name' => __( 'Analytics Account', 'geodir-ga' ),
-						'placeholder' => ( ! empty( $accounts ) ? __( 'Select Account', 'geodir-ga' ) : __( 'Log-In to select account', 'geodir-ga' ) ),
-						'desc' => __( 'Select the account that you setup for this site.', 'geodir-ga' ),
+						'name' => __( 'Analytics Property', 'geodir-ga' ),
+						'placeholder' => ( ! empty( $accounts ) ? __( 'Select Property', 'geodir-ga' ) : __( 'Log-In to select property', 'geodir-ga' ) ),
+						'desc' => __( 'Select the property that you setup for this site.', 'geodir-ga' ),
 						'options' => $accounts
+					),
+					array(
+						'id' => 'ga_measurement_id',
+						'type' => 'select',
+						'name' => __( 'Stream Measurement ID (GA4 Only)', 'geodir-ga' ),
+						'placeholder' => ( ! empty( $data_streams ) ? __( 'Select Measurement ID', 'geodir-ga' ) : __( 'No Data Stream found', 'geodir-ga' ) ),
+						'desc' => __( 'Select web stream measurement id that setup for the Google Analytics 4 property.', 'geodir-ga' ),
+						'options' => $data_streams
 					),
 					array(
 						'name' => __( 'Add tracking code to site?', 'geodir-ga' ),
@@ -165,75 +183,236 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 			return $url;
 		}
 
+		public static function get_data_streams_options() {
+			global $geodir_analytics_data_streams;
 
-		public static function analytics_accounts(){
-			$ga_account_id = geodir_get_option( 'ga_account_id' );
-			$ga_auth_code = geodir_get_option( 'ga_auth_code' );
-			
-			$accounts = array();
-			$useAuth = $ga_auth_code == '' ? false : true;
-			if ( $useAuth ) {
+			if ( is_array( $geodir_analytics_data_streams ) ) {
+				return $geodir_analytics_data_streams;
+			}
+
+			$property_id = geodir_get_option( 'ga_account_id' );
+			if ( ! empty( $_POST['ga_account_id'] ) ) {
+				$property_id = sanitize_text_field( $_POST['ga_account_id'] );
+			}
+			$auth_code = geodir_get_option( 'ga_auth_code' );
+
+			$data_stream_options = array();
+
+			if ( ! empty( $property_id ) && ! empty( $auth_code ) && geodir_ga_type( $property_id ) == 'ga4' ) {
 				try {
-					$accounts = self::get_analytics_accounts();
-				} catch (Exception $e) {
+					$data_streams = self::get_analytics_data_streams( $property_id );
+
+					if ( ! empty( $data_streams[ $property_id ] ) ) {
+						$data_stream_options = self::parse_data_stream_options( $data_streams[ $property_id ] );
+
+					}
+				} catch ( Exception $e ) {
 					geodir_error_log( wp_sprintf( __( 'GD Google Analytics API Error(%s) : %s', 'geodir-ga' ), $e->getCode(), $e->getMessage() ) );
 				}
 
-				if ( is_array( $accounts ) ) {
-					$accounts = array_merge( array( __( 'Select Account','geodir-ga' ) ), $accounts );
-				} elseif ( $ga_auth_code ) {
-					$accounts = array();
-					$accounts[ $ga_auth_code ] = __( 'Account re-authorization may be required', 'geodir-ga' ).' (' . $ga_account_id . ')';
-				} else {
-					$accounts = array();
+				if ( empty( $data_stream_options ) ) {
+					$data_stream_options = array( '' => __( 'No Data Stream found for GA4 property #', 'geodir-ga' ) . $property_id );
 				}
 			}
-			return $accounts;
+
+			$geodir_analytics_data_streams = $data_stream_options;
+
+			return $data_stream_options;
 		}
 
-		public static function get_analytics_accounts() {
+		public static function get_property_options() {
+			global $geodir_analytics_properties;
+
+			if ( is_array( $geodir_analytics_properties ) ) {
+				return $geodir_analytics_properties;
+			}
+
+			$auth_code = geodir_get_option( 'ga_auth_code' );
+
+			$property_options = array();
+
+			if ( $auth_code ) {
+				try {
+					$properties = self::get_analytics_properties();
+
+					if ( is_array( $properties ) ) {
+						$property_options = self::parse_property_options( $properties );
+					}
+				} catch ( Exception $e ) {
+					geodir_error_log( wp_sprintf( __( 'GD Google Analytics API Error(%s) : %s', 'geodir-ga' ), $e->getCode(), $e->getMessage() ) );
+				}
+
+				if ( empty( $property_options ) ) {
+					$property_options = array( '' => __( 'Account re-authorization may be required', 'geodir-ga' ) );
+				}
+			}
+
+			$geodir_analytics_properties = $property_options;
+
+			return $property_options;
+		}
+
+		public static function get_analytics_properties() {
 			global $gd_ga_errors;
+
 			if ( empty( $gd_ga_errors ) ) {
 				$gd_ga_errors = array();
 			}
-			$accounts = array();
+
+			$properties = array();
 
 			if ( geodir_get_option( 'ga_auth_token' ) === false ) {
 				geodir_update_option( 'ga_auth_token', '' );
 				geodir_update_option( 'ga_auth_date', '' );
 			}
 
-			if ( geodir_get_option( 'ga_uids' ) && ! isset( $_POST['ga_auth_code'] ) ) {
-				return geodir_get_option( 'ga_uids' );
+			if ( ! isset( $_POST['ga_auth_code'] ) && ( $_properties = geodir_get_option( 'ga_properties' ) ) ) {
+				return $_properties;
 			}
 
 			# Create a new Gdata call
-			if ( trim( geodir_get_option( 'ga_auth_code' ) ) != '' )
-				$stats = new GeoDir_Google_Analytics_API();
-			else
+			if ( trim( geodir_get_option( 'ga_auth_code' ) ) != '' ) {
+				$ga_api = new GeoDir_Google_Analytics_API();
+			} else {
 				return false;
+			}
 
 			# Check if Google sucessfully logged in
-			if ( ! $stats->checkLogin() )
-				return false;
+			$check_token = $ga_api->checkLogin();
 
-			# Get a list of accounts
+			if ( is_wp_error( $check_token ) ) {
+				geodir_error_log( $check_token->get_error_message(), 'Google Analytics Error', __FILE__, __LINE__ );
+				$gd_ga_errors[] = $check_token->get_error_message();
+
+				return false;
+			} else if ( ! $check_token ) {
+				return false;
+			}
+
+			# Get a list of properties
 			try {
-				$accounts = $stats->getAllProfiles();
+				$properties = $ga_api->get_properties();
 			} catch ( Exception $e ) {
 				$gd_ga_errors[] = $e->getMessage();
+
+				return false;
+			};
+
+			return $properties;
+		}
+
+		public static function get_analytics_data_streams( $property_id ) {
+			global $gd_ga_errors;
+
+			if ( empty( $gd_ga_errors ) ) {
+				$gd_ga_errors = array();
+			}
+
+			$data_streams = array();
+
+			if ( $_data_streams = geodir_get_option( 'ga_data_streams' ) ) {
+				if ( ! empty( $_data_streams ) && ! empty( $_data_streams[ $property_id ] ) ) {
+					return $_data_streams;
+				}
+			}
+
+			# Create a new Gdata call
+			if ( trim( geodir_get_option( 'ga_auth_code' ) ) != '' ) {
+				$geodir_analytics_api = new GeoDir_Google_Analytics_API();
+			} else {
 				return false;
 			}
 
-			natcasesort ( $accounts );
+			# Check if Google sucessfully logged in
+			$check_token = $geodir_analytics_api->checkLogin();
 
-			# Return the account array if there are accounts
-			if ( count( $accounts ) > 0 ) {
-				geodir_update_option( 'ga_uids', $accounts );
-				return $accounts;
-			}
-			else
+			if ( is_wp_error( $check_token ) ) {
+				geodir_error_log( $check_token->get_error_message(), 'Google Analytics Error', __FILE__, __LINE__ );
+				$gd_ga_errors[] = $check_token->get_error_message();
+
 				return false;
+			} else if ( ! $check_token ) {
+				return false;
+			}
+
+			# Get a list of data streams
+			try {
+				$data_streams = $geodir_analytics_api->getDataStreams( $property_id );
+				$data_streams = ! empty( $data_streams['dataStreams'] ) ? array( $property_id => $data_streams['dataStreams'] ) : '';
+
+				geodir_update_option( 'ga_data_streams', $data_streams );
+			} catch ( Exception $e ) {
+				$gd_ga_errors[] = $e->getMessage();
+
+				return false;
+			};
+
+			return $data_streams;
+		}
+
+		public static function parse_property_options( $properties ) {
+			$options = array();
+
+			if ( ! empty( $properties ) ) {
+				foreach ( $properties as $property_id => $property ) {
+					if ( isset( $property['pType'] ) && $property['pType'] == 'ga4' ) {
+						$options[ $property_id ] = wp_sprintf( __( '%s ( Google Analytics 4 )', 'geodir-ga' ), $property['displayName'] );
+					} else {
+						$options[ $property_id ] = wp_sprintf( __( '%s ( Universal Analytics )', 'geodir-ga' ), $property['name'] );
+					}
+				}
+
+				asort( $options );
+			} else {
+				$options = array( '' => __( 'No account found, try to re-authorize','geodir-ga' ) );
+			}
+
+			return $options;
+		}
+
+		public static function parse_data_stream_options( $data_streams ) {
+			$options = array();
+
+			if ( ! empty( $data_streams ) ) {
+				foreach ( $data_streams as $key => $data_stream ) {
+					if ( empty( $data_stream['webStreamData']['measurementId'] ) ) {
+						continue;
+					}
+
+					$measurement_id = $data_stream['webStreamData']['measurementId'];
+
+					$options[ $measurement_id ] = $data_stream['displayName'] . ' ( ' . $measurement_id . ' )';
+				}
+
+				asort( $options );
+			} else {
+				$options = array( '' => __( 'No data stream found','geodir-ga' ) );
+			}
+
+			return $options;
+		}
+
+		public static function check_measurement_id() {
+			global $geodir_check_measurement;
+
+			if ( ! $geodir_check_measurement && ! empty( $_REQUEST['tab'] ) && $_REQUEST['tab'] == 'analytics' && ( $property_id = geodir_get_option( 'ga_account_id' ) ) && geodir_get_option( 'ga_auth_code' ) ) {
+				if ( geodir_ga_type( $property_id ) == 'ga4' ) {
+					$data_stream = geodir_get_option( 'ga_data_stream' );
+
+					if ( ! empty( $data_stream ) && ! empty( $data_stream['webStreamData']['measurementId'] ) && ! empty( $data_stream['name'] ) && strpos( $data_stream['name'], 'properties/' . $property_id . '/' ) === 0 ) {
+						// measurement exists!
+					} else {
+						$geodir_analytics_api = new GeoDir_Google_Analytics_API();
+						$check_token = $geodir_analytics_api->checkLogin();
+
+						if ( $check_token && ! is_wp_error( $check_token ) ) {
+							$data_stream = $geodir_analytics_api->getDataStream( $property_id );
+						}
+					}
+				}
+			}
+
+			$geodir_check_measurement = true;
 		}
 	}
 

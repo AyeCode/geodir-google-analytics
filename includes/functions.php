@@ -73,80 +73,120 @@ function geodir_ga_sec2hms( $sec, $padHours = false ) {
  * @return string Html text content.
  */
 function geodir_ga_get_analytics( $page, $ga_start, $ga_end ) {
-    // NEW ANALYTICS
-    $start_date = '';
-    $end_date = '';
-    $dimensions = '';
-    $sort = '';
-    $filters = "ga:pagePath==".$page;
-    $metrics = "ga:pageviews";
-    $realtime = false;
-    $limit = false;
-    if (isset($_REQUEST['ga_type']) && $_REQUEST['ga_type'] == 'thisweek') {
-        $start_date = date('Y-m-d', strtotime("-6 day"));
-        $end_date = date('Y-m-d');
-        $dimensions = "ga:date,ga:nthDay";
-    } elseif (isset($_REQUEST['ga_type']) && $_REQUEST['ga_type'] == 'lastweek') {
-        $start_date = date('Y-m-d', strtotime("-13 day"));
-        $end_date = date('Y-m-d', strtotime("-7 day"));
-        $dimensions = "ga:date,ga:nthDay";
-    } elseif (isset($_REQUEST['ga_type']) && $_REQUEST['ga_type'] == 'thismonth') {
-        $start_date = date('Y-m-01');
-        $end_date = date('Y-m-d');
-        $dimensions = "ga:date,ga:nthDay";
-    } elseif (isset($_REQUEST['ga_type']) && $_REQUEST['ga_type'] == 'lastmonth') {
-        $start_date = date('Y-m-01', strtotime("-1 month"));
-        $end_date = date('Y-m-t', strtotime("-1 month"));
-        $dimensions = "ga:date,ga:nthDay";
-    } elseif (isset($_REQUEST['ga_type']) && $_REQUEST['ga_type'] == 'thisyear') {
-        $start_date = date('Y')."-01-01";
-        $end_date = date('Y-m-d');
-        $dimensions = "ga:month,ga:nthMonth";
-    } elseif (isset($_REQUEST['ga_type']) && $_REQUEST['ga_type'] == 'lastyear') {
-        $start_date = date('Y', strtotime("-1 year"))."-01-01";
-        $end_date = date('Y', strtotime("-1 year"))."-12-31";
-        $dimensions = "ga:month,ga:nthMonth";
-    } elseif (isset($_REQUEST['ga_type']) && $_REQUEST['ga_type'] == 'country') {
-        $start_date = "14daysAgo";
-        $end_date = "today";
-        $dimensions = "ga:country";
-        $sort = "-ga:pageviews";
-        $limit  = 5;
-    } elseif (isset($_REQUEST['ga_type']) && $_REQUEST['ga_type'] == 'realtime') {
-        $metrics = "rt:activeUsers";
-        $realtime = true;
-    }
+	$type = ! empty( $_REQUEST['ga_type'] ) ? sanitize_text_field( $_REQUEST['ga_type'] ) : 'realtime';
+	$start_date = '';
+	$end_date = '';
+	$dimensions = '';
+	$sort = '';
+	$filters = "ga:pagePath==".$page;
+	$metrics = "ga:pageviews";
+	$realtime = false;
+	$limit = false;
 
-    # Create a new Gdata call
-    $gaApi = new GeoDir_Google_Analytics_API();
+	if ( $type == 'thisweek' ) {
+		$start_date = date( 'Y-m-d', strtotime( '-6 day' ) );
+		$end_date = date( 'Y-m-d' );
+		$dimensions = "ga:date,ga:nthDay";
+		$_dimensions = 'date';
+	} else if ( $type == 'lastweek' ) {
+		$start_date = date( 'Y-m-d', strtotime( '-13 day' ) );
+		$end_date = date( 'Y-m-d', strtotime( '-7 day' ) );
+		$dimensions = "ga:date,ga:nthDay";
+		$_dimensions = 'date';
+	} else if ( $type == 'thismonth' ) {
+		$start_date = date( 'Y-m-01' );
+		$end_date = date( 'Y-m-d' );
+		$dimensions = "ga:date,ga:nthDay";
+		$_dimensions = 'date';
+	} else if ( $type == 'lastmonth' ) {
+		$start_date = date( 'Y-m-01', strtotime( '-1 month' ) );
+		$end_date = date( 'Y-m-t', strtotime( '-1 month' ) );
+		$dimensions = "ga:date,ga:nthDay";
+		$_dimensions = 'date';
+	} else if ( $type == 'thisyear' ) {
+		$start_date = date( 'Y' )."-01-01";
+		$end_date = date( 'Y-m-d' );
+		$dimensions = "ga:month,ga:nthMonth";
+		$_dimensions = 'month';
+	} else if ( $type == 'lastyear' ) {
+		$start_date = date( 'Y', strtotime( '-1 year' ) ) . "-01-01";
+		$end_date = date( 'Y', strtotime( '-1 year' ) ) . "-12-31";
+		$dimensions = "ga:month,ga:nthMonth";
+		$_dimensions = 'month';
+	} else if ( $type == 'country' ) {
+		$start_date = "14daysAgo";
+		$end_date = "today";
+		$dimensions = "ga:country";
+		$sort = "-ga:pageviews";
+		$limit  = 10;
+		$_dimensions = 'country';
+	} else {
+		$metrics = "rt:activeUsers";
+		$realtime = true;
+		$_dimensions = '';
+	}
 
-    # Check if Google successfully logged in
-    if ( ! $gaApi->checkLogin() ) {
-        echo json_encode( array( 'error' => __( 'Please check Google Analytics Settings', 'geodir-ga' ) ) );
-        return false;
-    }
+	# Create a new Gdata call
+	$gaApi = new GeoDir_Google_Analytics_API();
 
-    $account = $gaApi->getSingleProfile();
+	# Check if Google successfully logged in
+	$check_token = $gaApi->checkLogin();
 
-    if ( ! isset( $account[0]['id'] ) ) {
-        echo json_encode(array('error'=>__('Please check Google Analytics Settings','geodir-ga')));
-        return false;
-    }
+	if ( is_wp_error( $check_token ) ) {
+		geodir_error_log( $check_token->get_error_message(), 'Google Analytics Error', __FILE__, __LINE__ );
 
-    $account = $account[0]['id'];
+		echo json_encode( array( 'error' => $check_token->get_error_message() ) );
 
-    # Set the account to the one requested
-    $gaApi->setAccount( $account );
+		return false;
+	} else if ( ! $check_token ) {
+		echo json_encode( array( 'error' => __( 'Please check Google Analytics Settings', 'geodir-ga' ) ) );
 
-    # Get the metrics needed to build the visits graph;
-    try {
-        $stats = $gaApi->getMetrics( $metrics, $start_date, $end_date, $dimensions, $sort, $filters, $limit , $realtime );
-    } catch ( Exception $e ) {
-        print 'GA Summary Widget - there was a service error ' . $e->getCode() . ':' . $e->getMessage();
-    }
+		return false;
+	}
 
-    echo json_encode( $stats );
-    exit;
+	$stats = array();
+
+	$property_id = geodir_get_option( 'ga_account_id' );
+
+	if ( geodir_ga_type( $property_id ) == 'ga4' ) {
+		$page_title = ! empty( $_REQUEST['ga_title'] ) ? sanitize_text_field( $_REQUEST['ga_title'] ) : '';
+
+		$stats = $gaApi->getReport( $property_id, $type, $start_date, $end_date, $_dimensions, $page, $page_title, $limit );
+	} else {
+		$view = $gaApi->getView( $property_id );
+
+		if ( empty( $view['id'] ) ) {
+			echo json_encode( array( 'error' => __( 'Google Analytics account property view is not setup properly!', 'geodir-ga' ) ) );
+			return false;
+		}
+
+		# Set the account to the one requested
+		$gaApi->setAccount( $view['id'] );
+
+		# Get the metrics needed to build the visits graph;
+		try {
+			$stats = $gaApi->getMetrics( $metrics, $start_date, $end_date, $dimensions, $sort, $filters, $limit , $realtime );
+		} catch ( Exception $e ) {
+			print 'GA Summary Widget - there was a service error ' . $e->getCode() . ':' . $e->getMessage();
+		}
+	}
+
+	echo json_encode( $stats );
+	exit;
+}
+
+function geodir_ga_type( $property_id = '' ) {
+	if ( empty( $property_id ) ) {
+		$property_id = geodir_get_option( 'ga_account_id' );
+	}
+
+	if ( ! empty( $property_id ) && strpos( strtolower( $property_id ), 'ua-' ) === false ) {
+		$type = 'ga4';
+	} else {
+		$type = 'ua';
+	}
+
+	return $type;
 }
 
 function geodir_ga_get_token() {
@@ -290,7 +330,7 @@ jQuery(document).ready(function() {
 	Chart.defaults.responsive = true;
 	Chart.defaults.maintainAspectRatio = false;
 
-	jQuery('.gdga-show-analytics').click(function(e) {
+	jQuery('.gdga-show-analytics').on("click", function(e) {
 		jQuery(this).hide();
 		jQuery('.gdga-analytics-box').show();
 		gdga_weekVSweek();
@@ -298,7 +338,7 @@ jQuery(document).ready(function() {
 	});
 
 	if (gd_gaAutoRefresh !== 1) {
-		jQuery('#gdga-loader-icon').click(function(e) {
+		jQuery('#gdga-loader-icon').on("click", function(e) {
 			gdga_refresh();
 			clearTimeout(gd_gaTimeOut);
 			gdga_realtime();
@@ -307,11 +347,21 @@ jQuery(document).ready(function() {
 });
 
 function gdga_weekVSweek() {
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thisweek&pt='); ?>"+gd_gaPageToken, success: function(result){
-		ga_data1 = jQuery.parseJSON(result);
-		if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
-		gd_renderWeekOverWeekChart();
-	}});
+	jQuery.ajax({
+		url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thisweek&pt='); ?>"+gd_gaPageToken,
+		beforeSend: function() {
+			jQuery('#gdga-chart-container').css({opacity: 0.6});
+		},
+		success: function(result){
+			ga_data1 = jQuery.parseJSON(result);
+			if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
+			gd_renderWeekOverWeekChart();
+			jQuery('#gdga-chart-container').css({opacity: 1});
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			jQuery('#gdga-chart-container').css({opacity: 1});
+		}
+	});
 
 	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=lastweek&pt='); ?>"+gd_gaPageToken, success: function(result){
 		ga_data2 = jQuery.parseJSON(result);
@@ -320,11 +370,21 @@ function gdga_weekVSweek() {
 }
 
 function gdga_monthVSmonth() {
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thismonth&pt='); ?>"+gd_gaPageToken, success: function(result){
-		ga_data1 = jQuery.parseJSON(result);
-		if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
-		gd_renderMonthOverMonthChart();
-	}});
+	jQuery.ajax({
+		url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thismonth&pt='); ?>"+gd_gaPageToken,
+		beforeSend: function() {
+			jQuery('#gdga-chart-container').css({opacity: 0.6});
+		},
+		success: function(result){
+			ga_data1 = jQuery.parseJSON(result);
+			if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
+			gd_renderMonthOverMonthChart();
+			jQuery('#gdga-chart-container').css({opacity: 1});
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			jQuery('#gdga-chart-container').css({opacity: 1});
+		}
+	});
 
 	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=lastmonth&pt='); ?>"+gd_gaPageToken, success: function(result){
 		ga_data2 = jQuery.parseJSON(result);
@@ -333,12 +393,21 @@ function gdga_monthVSmonth() {
 }
 
 function gdga_yearVSyear() {
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thisyear&pt='); ?>"+gd_gaPageToken, success: function(result){
-		ga_data3 = jQuery.parseJSON(result);
-		if(ga_data3.error){jQuery('#ga_stats').html(result);return;}
-
-		gd_renderYearOverYearChart()
-	}});
+	jQuery.ajax({
+		url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thisyear&pt='); ?>"+gd_gaPageToken,
+		beforeSend: function() {
+			jQuery('#gdga-chart-container').css({opacity: 0.6});
+		},
+		success: function(result){
+			ga_data3 = jQuery.parseJSON(result);
+			if(ga_data3.error){jQuery('#ga_stats').html(result);return;}
+			gd_renderYearOverYearChart();
+			jQuery('#gdga-chart-container').css({opacity: 1});
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			jQuery('#gdga-chart-container').css({opacity: 1});
+		}
+	});
 
 	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=lastyear&pt='); ?>"+gd_gaPageToken, success: function(result){
 		ga_data4 = jQuery.parseJSON(result);
@@ -347,15 +416,25 @@ function gdga_yearVSyear() {
 }
 
 function gdga_country() {
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=country&pt='); ?>"+gd_gaPageToken, success: function(result){
-		ga_data5 = jQuery.parseJSON(result);
-		if(ga_data5.error){jQuery('#ga_stats').html(result);return;}
-		gd_renderTopCountriesChart();
-	}});
+	jQuery.ajax({
+		url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=country&pt='); ?>"+gd_gaPageToken,
+		beforeSend: function() {
+			jQuery('#gdga-chart-container').css({opacity: 0.6});
+		},
+		success: function(result){
+			ga_data5 = jQuery.parseJSON(result);
+			if(ga_data5.error){jQuery('#ga_stats').html(result);return;}
+			gd_renderTopCountriesChart();
+			jQuery('#gdga-chart-container').css({opacity: 1});
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			jQuery('#gdga-chart-container').css({opacity: 1});
+		}
+	});
 }
 
 function gdga_realtime(dom_ready) {
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=realtime&pt='); ?>"+gd_gaPageToken, success: function(result) {
+	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'" + geodir_analytics_title_arg() + "&ga_type=realtime&pt='); ?>"+gd_gaPageToken, success: function(result) {
 		ga_data6 = jQuery.parseJSON(result);
 		if (ga_data6.error) {
 			jQuery('#ga_stats').html(result);
@@ -365,13 +444,25 @@ function gdga_realtime(dom_ready) {
 	}});
 }
 
+function geodir_analytics_title_arg() {
+	var title = jQuery('title:first').text();
+	if (title) {
+		title = encodeURIComponent(title);
+	}
+	return '&ga_title=' + title;
+}
+
 function gd_renderRealTime(dom_ready) {
 	if (typeof dom_ready === 'undefined') {
 		gdga_refresh(true);
 	}
 	ga_au_old = ga_au;
 
-	ga_au = ga_data6 && typeof ga_data6 == 'object' && ga_data6.totalsForAllResults ? ga_data6.totalsForAllResults["rt:activeUsers"] : 0;
+	if (ga_data6 && typeof ga_data6 == 'object' && ga_data6.activeUsers && ga_data6.activeUsers.realtime) {
+		ga_au = typeof ga_data6.activeUsers.realtime.totalActiveUsers != 'undefined' ? ga_data6.activeUsers.realtime.totalActiveUsers : 0;
+	} else {
+		ga_au = ga_data6 && typeof ga_data6 == 'object' && ga_data6.totalsForAllResults ? ga_data6.totalsForAllResults["rt:activeUsers"] : 0;
+	}
 	if (ga_au > ga_au_old) {
 		jQuery('.gd-ActiveUsers').addClass("is-increasing");
 	}
@@ -409,13 +500,21 @@ function gd_renderTopCountriesChart() {
 	jQuery('.gdga-type-container').show();
 	jQuery('#gdga-select-analytic').prop('disabled', false);
 
+	var rows = [];
+	if (typeof response.screenPageViews !== 'undefined') {
+		try {
+			rows = response['screenPageViews']['country']['rows'];
+		} catch(err) {}
+	} else {
+		rows = response.rows;
+	}
 	var labels = [];
 	var values = [];
 	var bgcolors = [];
-	var colors = ['#4D5360', '#949FB1', '#D4CCC5', '#E2EAE9', '#F7464A'];
+	var colors = ['rgb(255,165,0)', 'rgb(255,0,0)', 'rgb(128,0,128)','rgb(54,162,235)', 'rgb(0,128,0)', 'rgb(0,0,255)', 'rgb(192,192,192)', 'rgb(128,0,0)', 'rgb(255,127,80)', '189,183,107)', 'rgb(255,215,0)'];
 
-	if (response.rows) {
-		response.rows.forEach(function(row, i) {
+	if (rows.length) {
+		rows.forEach(function(row, i) {
 			labels[i] = row[0];
 			values[i] = parseInt(row[1]);
 			bgcolors[i] = colors[i];
@@ -429,7 +528,7 @@ function gd_renderTopCountriesChart() {
 				backgroundColor: bgcolors,
 				hoverOffset: 4
 			}]
-		};console.log(data);
+		};
 
 		new Chart(makeCanvas('gdga-chart-container'),{type:'doughnut',data:data});
 	} else {
@@ -448,6 +547,16 @@ function gdga_noResults() {
  */
 function gd_renderYearOverYearChart() {
 	if (ga_data3 && ga_data4) {
+		if (typeof ga_data3.screenPageViews !== 'undefined') {
+			try {
+				ga_data3.rows = ga_data3['screenPageViews']['thisyear']['rows'];
+			} catch(err) {}
+		}
+		if (typeof ga_data4.screenPageViews !== 'undefined') {
+			try {
+				ga_data4.rows = ga_data4['screenPageViews']['lastyear']['rows'];
+			} catch(err) {}
+		}
 		thisYear = ga_data3;
 		lastYear = ga_data4;
 		ga_data3 = false;
@@ -519,6 +628,16 @@ function gd_renderYearOverYearChart() {
  */
 function gd_renderWeekOverWeekChart() {
 	if(ga_data1 && ga_data2){
+		if (typeof ga_data1.screenPageViews !== 'undefined') {
+			try {
+				ga_data1.rows = ga_data1['screenPageViews']['thisweek']['rows'];
+			} catch(err) {}
+		}
+		if (typeof ga_data2.screenPageViews !== 'undefined') {
+			try {
+				ga_data2.rows = ga_data2['screenPageViews']['lastweek']['rows'];
+			} catch(err) {}
+		}
 		thisWeek = ga_data1;
 		lastWeek = ga_data2;
 		ga_data1 = false;
@@ -538,7 +657,6 @@ function gd_renderWeekOverWeekChart() {
 	Promise.all([thisWeek, lastWeek]).then(function(results) {
 		var data1 = results && results[0] && results[0].rows ? results[0].rows.map(function(row) { return +row[2]; }) : [];
 		var data2 = results && results[1] && results[1].rows ? results[1].rows.map(function(row) { return +row[2]; }) : [];
-
 		<?php
 		// Here we list the shorthand days of the week so it can be used in translation.
 		__("Mon",'geodir-ga');
@@ -584,6 +702,16 @@ function gd_renderWeekOverWeekChart() {
 
 function gd_renderMonthOverMonthChart() {
 	if(ga_data1 && ga_data2){
+		if (typeof ga_data1.screenPageViews !== 'undefined') {
+			try {
+				ga_data1.rows = ga_data1['screenPageViews']['thismonth']['rows'];
+			} catch(err) {}
+		}
+		if (typeof ga_data2.screenPageViews !== 'undefined') {
+			try {
+				ga_data2.rows = ga_data2['screenPageViews']['lastmonth']['rows'];
+			} catch(err) {}
+		}
 		thisMonth = ga_data1;
 		lastMonth = ga_data2;
 		ga_data1 = false;
@@ -833,20 +961,29 @@ function geodir_ga_htmlEscape(str) {
  * @package GeoDirectory
  */
 function geodir_ga_add_tracking_code() {
-    if ( geodir_get_option( 'ga_add_tracking_code' ) && ( $account_id = geodir_get_option( 'ga_account_id' ) ) ) { ?>
-<script>
-	(function(i,s,o,g,r,a,m){ i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', '<?php echo esc_attr( $account_id ); ?>', 'auto');
-	<?php if ( geodir_get_option( 'ga_anonymize_ip' ) ) { echo "ga('set', 'anonymizeIP', true);"; } ?>
-	ga('send', 'pageview');
-</script>
-        <?php
-    } elseif ( ( $tracking_code = geodir_get_option( 'ga_tracking_code' ) ) && ! geodir_get_option( 'ga_account_id' ) ) {
-        echo stripslashes( geodir_get_option( 'ga_tracking_code' ) );
-    }
+	if ( geodir_get_option( 'ga_add_tracking_code' ) && ( $property_id = geodir_get_option( 'ga_account_id' ) ) ) {
+		if ( geodir_ga_type( $property_id ) == 'ga4' ) {
+			$measurement_id = geodir_get_option( 'ga_measurement_id' );
+
+			if ( empty( $measurement_id ) ) {
+				$data_stream = geodir_get_option( 'ga_data_stream' );
+
+				if ( ! ( ! empty( $data_stream ) && ! empty( $data_stream['webStreamData']['measurementId'] ) ) ) {
+					return;
+				}
+
+				$measurement_id = $data_stream['webStreamData']['measurementId'];
+			}
+
+?><meta name="generator" content="GeoDirectory Google Analytics v<?php echo (float) GEODIR_GA_VERSION; ?>" /><script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo rawurlencode( $measurement_id ); ?>"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '<?php echo esc_attr( $measurement_id ); ?>');</script>
+<?php
+		} else {
+?><meta name="generator" content="GeoDirectory Google Analytics v<?php echo (float) GEODIR_GA_VERSION; ?>" /><script>(function(i,s,o,g,r,a,m){ i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', '<?php echo esc_attr( $property_id ); ?>', 'auto');<?php if ( geodir_get_option( 'ga_anonymize_ip' ) ) { echo "ga('set', 'anonymizeIP', true);"; } ?>ga('send', 'pageview');</script>
+<?php
+		}
+	} elseif ( ( $tracking_code = geodir_get_option( 'ga_tracking_code' ) ) && ! geodir_get_option( 'ga_account_id' ) ) {
+		echo stripslashes( geodir_get_option( 'ga_tracking_code' ) );
+	}
 }
 
 function geodir_ga_check_post_google_analytics( $post ) {
