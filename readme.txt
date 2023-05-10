@@ -5,7 +5,7 @@ Tags: geodirectory, google analytics, geodirectory google analytics, tracking
 Requires at least: 4.9
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 2.3
+Stable tag: 2.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,7 +37,7 @@ An answer to that question.
 
 == Changelog ==
 
-= 2.3.1 =
+= 2.3.1 - 2023-05-10 =
 * Google Analytics 4 compatibility - ADDED
 
 = 2.3 - 2023-03-16 =
