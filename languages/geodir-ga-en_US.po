@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory Google Analytics 2.3.2\n"
+"Project-Id-Version: GeoDirectory Google Analytics 2.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 13:12+0530\n"
-"PO-Revision-Date: 2023-12-08 13:13+0530\n"
+"POT-Creation-Date: 2024-05-30 20:44+0530\n"
+"PO-Revision-Date: 2024-05-30 20:44+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:210
 #: includes/admin/settings/class-geodir-settings-analytics.php:242
-#: includes/class-geodir-google-analytics-ajax.php:73
+#: includes/class-geodir-google-analytics-ajax.php:76
 #, php-format
 msgid "GD Google Analytics API Error(%s) : %s"
 msgstr ""
@@ -199,11 +199,11 @@ msgstr ""
 msgid "No data stream found"
 msgstr ""
 
-#: includes/class-geodir-google-analytics-ajax.php:76
+#: includes/class-geodir-google-analytics-ajax.php:79
 msgid "GD Google Analytics API Error : empty stats"
 msgstr ""
 
-#: includes/class-geodir-google-analytics-ajax.php:120
+#: includes/class-geodir-google-analytics-ajax.php:123
 msgid "Something went wrong"
 msgstr ""
 
@@ -238,144 +238,144 @@ msgstr ""
 msgid "Login failed"
 msgstr ""
 
-#: includes/functions.php:526
-msgid "Countries"
-msgstr ""
-
-#: includes/functions.php:540
-msgid "No results available"
-msgstr ""
-
-#: includes/functions.php:580
-msgid "Jan"
-msgstr ""
-
-#: includes/functions.php:581
-msgid "Feb"
-msgstr ""
-
-#: includes/functions.php:582
-msgid "Mar"
-msgstr ""
-
-#: includes/functions.php:583
-msgid "Apr"
-msgstr ""
-
-#: includes/functions.php:584
-msgid "May"
-msgstr ""
-
-#: includes/functions.php:585
-msgid "Jun"
-msgstr ""
-
-#: includes/functions.php:586
-msgid "Jul"
-msgstr ""
-
-#: includes/functions.php:587
-msgid "Aug"
-msgstr ""
-
-#: includes/functions.php:588
-msgid "Sep"
-msgstr ""
-
-#: includes/functions.php:589
-msgid "Oct"
-msgstr ""
-
-#: includes/functions.php:590
-msgid "Nov"
-msgstr ""
-
-#: includes/functions.php:591
-msgid "Dec"
-msgstr ""
-
-#: includes/functions.php:604
-msgid "Last Year"
-msgstr ""
-
-#: includes/functions.php:610
-msgid "This Year"
-msgstr ""
-
-#: includes/functions.php:662
+#: includes/functions.php:314
 msgid "Mon"
 msgstr ""
 
-#: includes/functions.php:663
+#: includes/functions.php:315
 msgid "Tue"
 msgstr ""
 
-#: includes/functions.php:664
+#: includes/functions.php:316
 msgid "Wed"
 msgstr ""
 
-#: includes/functions.php:665
+#: includes/functions.php:317
 msgid "Thu"
 msgstr ""
 
-#: includes/functions.php:666
+#: includes/functions.php:318
 msgid "Fri"
 msgstr ""
 
-#: includes/functions.php:667
+#: includes/functions.php:319
 msgid "Sat"
 msgstr ""
 
-#: includes/functions.php:668
+#: includes/functions.php:320
 msgid "Sun"
 msgstr ""
 
-#: includes/functions.php:685
+#: includes/functions.php:332
+msgid "Countries"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Jan"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Feb"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Mar"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Apr"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "May"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Jun"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Jul"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Aug"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Sep"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Oct"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Nov"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Dec"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "Last Year"
+msgstr ""
+
+#: includes/functions.php:333
+msgid "This Year"
+msgstr ""
+
+#: includes/functions.php:334
 msgid "Last Week"
 msgstr ""
 
-#: includes/functions.php:691
+#: includes/functions.php:334
 msgid "This Week"
 msgstr ""
 
-#: includes/functions.php:745
+#: includes/functions.php:335
 msgid "Last Month"
 msgstr ""
 
-#: includes/functions.php:751
+#: includes/functions.php:335
 msgid "This Month"
 msgstr ""
 
-#: includes/functions.php:854 includes/functions.php:914
+#: includes/functions.php:336
+msgid "No results available"
+msgstr ""
+
+#: includes/functions.php:366
 #: includes/widgets/class-geodir-google-analytics-widget-post-analytics.php:89
 msgid "Show Google Analytics"
 msgstr ""
 
-#: includes/functions.php:857 includes/functions.php:918
+#: includes/functions.php:369 includes/functions.php:405
 msgid "Refresh"
 msgstr ""
 
-#: includes/functions.php:857 includes/functions.php:918
+#: includes/functions.php:369 includes/functions.php:405
 msgid "Active Users:"
 msgstr ""
 
-#: includes/functions.php:858 includes/functions.php:916
+#: includes/functions.php:370 includes/functions.php:403
 msgid "Analytics"
 msgstr ""
 
-#: includes/functions.php:872 includes/functions.php:923
+#: includes/functions.php:384 includes/functions.php:410
 msgid "Last Week vs This Week"
 msgstr ""
 
-#: includes/functions.php:873 includes/functions.php:924
+#: includes/functions.php:385 includes/functions.php:411
 msgid "This Month vs Last Month"
 msgstr ""
 
-#: includes/functions.php:874 includes/functions.php:925
+#: includes/functions.php:386 includes/functions.php:412
 msgid "This Year vs Last Year"
 msgstr ""
 
-#: includes/functions.php:875 includes/functions.php:926
+#: includes/functions.php:387 includes/functions.php:413
 msgid "Top Countries"
 msgstr ""
 
