@@ -50,6 +50,9 @@ class GeoDir_Google_Analytics_AJAX {
 
 	public static function ga_stats() {
 		$referer = wp_get_referer();
+		if ( ! $referer && ! empty( $_REQUEST['ga_post'] ) ) {
+			$referer = get_permalink( (int) $_REQUEST['ga_post'] );
+		}
 
 		$page = isset( $_REQUEST['ga_page'] ) ? urldecode( $_REQUEST['ga_page'] ) : '';
 		$page_token = isset( $_REQUEST['pt'] ) ? sanitize_text_field( $_REQUEST['pt'] ) : '';

@@ -3,7 +3,7 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: geodirectory, ga4, google analytics, geodirectory google analytics, tracking
 Requires at least: 4.9
-Tested up to: 6.4
+Tested up to: 6.5
 Requires PHP: 5.6
 Stable tag: 2.3.2
 License: GPLv3
@@ -34,6 +34,9 @@ Yes
 == Screenshots ==
 
 == Changelog ==
+
+= 2.3.3 - TBD =
+* Sometimes restricted HTTP_REFERRER in AJAX request breaks analytics - FIXED
 
 = 2.3.2 - 2023-12-08 =
 * WordPress v6.4 compatibility check - CHANGED

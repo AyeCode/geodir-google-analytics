@@ -285,547 +285,59 @@ function geodir_ga_display_analytics($args = array()) {
 		}
 	}
 
-    ob_start(); // Start buffering;
-    /**
-     * This is called before the edit post link html in the function geodir_detail_page_google_analytics()
-     *
-     * @since 1.0.0
-     */
-    do_action( 'geodir_before_google_analytics' );
-    
-    $refresh_time = geodir_get_option( 'ga_refresh_time', 5 );
-    /**
-     * Filter the time interval to check & refresh new users results.
-     *
-     * @since 1.0.0
-     *
-     * @param int $refresh_time Time interval to check & refresh new users results.
-     */
-    $refresh_time = apply_filters('geodir_google_analytics_refresh_time', $refresh_time);
-    $refresh_time = absint( $refresh_time ) * 1000;
-    
-    $hide_refresh = geodir_get_option('ga_auto_refresh');
-    
-    $auto_refresh = $hide_refresh && $refresh_time && $refresh_time > 0 ? 1 : 0;
-    if (geodir_get_option('ga_stats')) {
-        $page_url = urlencode($_SERVER['REQUEST_URI']);
-        ?>
-<script type="text/javascript">
-var gd_gaTimeOut;
-var gd_gaTime = parseInt('<?php echo $refresh_time;?>');
-var gd_gaHideRefresh = <?php echo (int)$hide_refresh;?>;
-var gd_gaAutoRefresh = <?php echo $auto_refresh;?>;
-var gd_gaPageToken = "<?php echo geodir_ga_get_page_access_token( $args['user_roles'] ); ?>";
-ga_data1 = false;
-ga_data2 = false;
-ga_data3 = false;
-ga_data4 = false;
-ga_data5 = false;
-ga_data6 = false;
-ga_au = 0;
-jQuery(document).ready(function() {
-	// Set some global Chart.js defaults.
-	Chart.defaults.animationSteps = 60;
-	Chart.defaults.animationEasing = 'easeInOutQuart';
-	Chart.defaults.responsive = true;
-	Chart.defaults.maintainAspectRatio = false;
+	ob_start(); // Start buffering;
+	/**
+	 * This is called before the edit post link html in the function geodir_detail_page_google_analytics()
+	 *
+	 * @since 1.0.0
+	 */
+	do_action( 'geodir_before_google_analytics' );
 
-	jQuery('.gdga-show-analytics').on("click", function(e) {
-		jQuery(this).hide();
-		jQuery('.gdga-analytics-box').show();
-		gdga_weekVSweek();
-		gdga_realtime(true);
-	});
+	$refresh_time = geodir_get_option( 'ga_refresh_time', 5 );
+	/**
+	 * Filter the time interval to check & refresh new users results.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $refresh_time Time interval to check & refresh new users results.
+	 */
+	$refresh_time = apply_filters('geodir_google_analytics_refresh_time', $refresh_time);
+	$refresh_time = absint( $refresh_time ) * 1000;
 
-	if (gd_gaAutoRefresh !== 1) {
-		jQuery('#gdga-loader-icon').on("click", function(e) {
-			gdga_refresh();
-			clearTimeout(gd_gaTimeOut);
-			gdga_realtime();
-		});
-	}
-});
+	$hide_refresh = geodir_get_option('ga_auto_refresh');
 
-function gdga_weekVSweek() {
-	jQuery.ajax({
-		url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thisweek&pt='); ?>"+gd_gaPageToken,
-		beforeSend: function() {
-			jQuery('#gdga-chart-container').css({opacity: 0.6});
-		},
-		success: function(result){
-			ga_data1 = jQuery.parseJSON(result);
-			if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
-			gd_renderWeekOverWeekChart();
-			jQuery('#gdga-chart-container').css({opacity: 1});
-		},
-		error: function(xhr, textStatus, errorThrown) {
-			jQuery('#gdga-chart-container').css({opacity: 1});
-		}
-	});
+	$auto_refresh = $hide_refresh && $refresh_time && $refresh_time > 0 ? 1 : 0;
+	if ( geodir_get_option( 'ga_stats' ) ) {
+		$page_url  = urlencode( $_SERVER['REQUEST_URI'] );
 
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=lastweek&pt='); ?>"+gd_gaPageToken, success: function(result){
-		ga_data2 = jQuery.parseJSON(result);
-		gd_renderWeekOverWeekChart();
-	}});
-}
-
-function gdga_monthVSmonth() {
-	jQuery.ajax({
-		url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thismonth&pt='); ?>"+gd_gaPageToken,
-		beforeSend: function() {
-			jQuery('#gdga-chart-container').css({opacity: 0.6});
-		},
-		success: function(result){
-			ga_data1 = jQuery.parseJSON(result);
-			if(ga_data1.error){jQuery('#ga_stats').html(result);return;}
-			gd_renderMonthOverMonthChart();
-			jQuery('#gdga-chart-container').css({opacity: 1});
-		},
-		error: function(xhr, textStatus, errorThrown) {
-			jQuery('#gdga-chart-container').css({opacity: 1});
-		}
-	});
-
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=lastmonth&pt='); ?>"+gd_gaPageToken, success: function(result){
-		ga_data2 = jQuery.parseJSON(result);
-		gd_renderMonthOverMonthChart();
-	}});
-}
-
-function gdga_yearVSyear() {
-	jQuery.ajax({
-		url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=thisyear&pt='); ?>"+gd_gaPageToken,
-		beforeSend: function() {
-			jQuery('#gdga-chart-container').css({opacity: 0.6});
-		},
-		success: function(result){
-			ga_data3 = jQuery.parseJSON(result);
-			if(ga_data3.error){jQuery('#ga_stats').html(result);return;}
-			gd_renderYearOverYearChart();
-			jQuery('#gdga-chart-container').css({opacity: 1});
-		},
-		error: function(xhr, textStatus, errorThrown) {
-			jQuery('#gdga-chart-container').css({opacity: 1});
-		}
-	});
-
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=lastyear&pt='); ?>"+gd_gaPageToken, success: function(result){
-		ga_data4 = jQuery.parseJSON(result);
-		gd_renderYearOverYearChart()
-	}});
-}
-
-function gdga_country() {
-	jQuery.ajax({
-		url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'&ga_type=country&pt='); ?>"+gd_gaPageToken,
-		beforeSend: function() {
-			jQuery('#gdga-chart-container').css({opacity: 0.6});
-		},
-		success: function(result){
-			ga_data5 = jQuery.parseJSON(result);
-			if(ga_data5.error){jQuery('#ga_stats').html(result);return;}
-			gd_renderTopCountriesChart();
-			jQuery('#gdga-chart-container').css({opacity: 1});
-		},
-		error: function(xhr, textStatus, errorThrown) {
-			jQuery('#gdga-chart-container').css({opacity: 1});
-		}
-	});
-}
-
-function gdga_realtime(dom_ready) {
-	jQuery.ajax({url: "<?php echo admin_url('admin-ajax.php?action=geodir_ga_stats&ga_page='.$page_url.'" + geodir_analytics_title_arg() + "&ga_type=realtime&pt='); ?>"+gd_gaPageToken, success: function(result) {
-		ga_data6 = jQuery.parseJSON(result);
-		if (ga_data6.error) {
-			jQuery('#ga_stats').html(result);
-			return;
-		}
-		gd_renderRealTime(dom_ready);
-	}});
-}
-
-function geodir_analytics_title_arg() {
-	var title = jQuery('title:first').text();
-	if (title) {
-		title = encodeURIComponent(title);
-	}
-	return '&ga_title=' + title;
-}
-
-function gd_renderRealTime(dom_ready) {
-	if (typeof dom_ready === 'undefined') {
-		gdga_refresh(true);
-	}
-	ga_au_old = ga_au;
-
-	if (ga_data6 && typeof ga_data6 == 'object' && ga_data6.activeUsers && ga_data6.activeUsers.realtime) {
-		ga_au = typeof ga_data6.activeUsers.realtime.totalActiveUsers != 'undefined' ? ga_data6.activeUsers.realtime.totalActiveUsers : 0;
-	} else {
-		ga_au = ga_data6 && typeof ga_data6 == 'object' && ga_data6.totalsForAllResults ? ga_data6.totalsForAllResults["rt:activeUsers"] : 0;
-	}
-	if (ga_au > ga_au_old) {
-		jQuery('.gd-ActiveUsers').addClass("is-increasing");
-	}
-
-	if (ga_au < ga_au_old) {
-		jQuery('.gd-ActiveUsers').addClass("is-decreasing");
-	}
-
-	jQuery('.gd-ActiveUsers-value').html(ga_au);
-
-	if (gd_gaTime > 0 && gd_gaAutoRefresh === 1) {
-		// check for new users every 5 seconds
-		gd_gaTimeOut = setTimeout(function() {
-			jQuery('.gd-ActiveUsers').removeClass("is-increasing is-decreasing");
-			gdga_realtime();
-		}, gd_gaTime);
-	}
-}
-
-/**
- * Draw the a chart.js doughnut chart with data from the specified view that
- * compares sessions from mobile, desktop, and tablet over the past two
- * weeks.
- */
-function gd_renderTopCountriesChart() {
-	if (ga_data5) {
-		response = ga_data5;
-		ga_data5 = false;
-	} else {
-		return;
-	}
-
-	jQuery('#gdga-chart-container').show();
-	gdga_refresh(true);
-	jQuery('.gdga-type-container').show();
-	jQuery('#gdga-select-analytic').prop('disabled', false);
-
-	var rows = [];
-	if (typeof response.screenPageViews !== 'undefined') {
-		try {
-			rows = response['screenPageViews']['country']['rows'];
-		} catch(err) {}
-	} else {
-		rows = response.rows;
-	}
-	var labels = [];
-	var values = [];
-	var bgcolors = [];
-	var colors = ['rgb(255,165,0)', 'rgb(255,0,0)', 'rgb(128,0,128)','rgb(54,162,235)', 'rgb(0,128,0)', 'rgb(0,0,255)', 'rgb(192,192,192)', 'rgb(128,0,0)', 'rgb(255,127,80)', '189,183,107)', 'rgb(255,215,0)'];
-
-	if (rows.length) {
-		rows.forEach(function(row, i) {
-			labels[i] = row[0];
-			values[i] = parseInt(row[1]);
-			bgcolors[i] = colors[i];
-		});
-
-		var data = {
-			labels: labels,
-			datasets: [{
-				label: '<?php echo addslashes( __( 'Countries', 'geodir-ga' ) );?>',
-				data: values,
-				backgroundColor: bgcolors,
-				hoverOffset: 4
-			}]
-		};
-
-		new Chart(makeCanvas('gdga-chart-container'),{type:'doughnut',data:data});
-	} else {
-		gdga_noResults();
-	}
-}
-
-function gdga_noResults() {
-	jQuery('#gdga-chart-container').html('<p>' + geodir_ga_htmlEscape('<?php echo esc_js( __( 'No results available', 'geodir-ga' ) ); ?>') + '</p>');
-}
-
-/**
- * Draw the a chart.js bar chart with data from the specified view that
- * overlays session data for the current year over session data for the
- * previous year, grouped by month.
- */
-function gd_renderYearOverYearChart() {
-	if (ga_data3 && ga_data4) {
-		if (typeof ga_data3.screenPageViews !== 'undefined') {
-			try {
-				ga_data3.rows = ga_data3['screenPageViews']['thisyear']['rows'];
-			} catch(err) {}
-		}
-		if (typeof ga_data4.screenPageViews !== 'undefined') {
-			try {
-				ga_data4.rows = ga_data4['screenPageViews']['lastyear']['rows'];
-			} catch(err) {}
-		}
-		thisYear = ga_data3;
-		lastYear = ga_data4;
-		ga_data3 = false;
-		ga_data4 = false;
-	} else {
-		return;
-	}
-
-	jQuery('#gdga-chart-container').show();
-	gdga_refresh(true);
-	jQuery('.gdga-type-container').show();
-	jQuery('#gdga-select-analytic').prop('disabled', false);
-
-	// Adjust `now` to experiment with different days, for testing only...
-	var now = moment(); // .subtract(3, 'day');
-
-	Promise.all([thisYear, lastYear]).then(function(results) {
-		var data1 = results && results[0] && results[0].rows ? results[0].rows.map(function(row) { return +row[2]; }) : [];
-		var data2 = results && results[1] && results[1].rows ? results[1].rows.map(function(row) { return +row[2]; }) : [];
-
-		var labels = [geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jan', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Feb', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Mar', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Apr', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'May', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jun', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jul', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Aug', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Sep', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Oct', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Nov', 'geodir-ga' ) ); ?>'),
-			geodir_ga_htmlEscape('<?php echo esc_js( __( 'Dec', 'geodir-ga' ) ); ?>')];
-
-		// Ensure the data arrays are at least as long as the labels array.
-		// Chart.js bar charts don't (yet) accept sparse datasets.
-		for (var i = 0, len = labels.length; i < len; i++) {
-			if (data1[i] === undefined) data1[i] = null;
-			if (data2[i] === undefined) data2[i] = null;
-		}
-
-		var data = {
-			labels : labels,
-			datasets : [
-				{
-					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Year', 'geodir-ga' ) ); ?>'),
-					borderColor:'rgb(255,159,64)',
-					backgroundColor:'rgba(255,159,64,0.5)',
-					data : data2
-				},
-				{
-					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Year', 'geodir-ga' ) ); ?>'),
-					borderColor:'rgb(54,162,235)',
-					backgroundColor:'rgba(54,162,235,0.5)',
-					data : data1
-				}
-			]
-		};
-
-		new Chart(makeCanvas('gdga-chart-container'),{type:'bar',data:data});
-	}).catch(function(err) {
-		console.error(err.stack);
-	})
-}
-
-/**
- * Draw the a chart.js line chart with data from the specified view that
- * overlays session data for the current week over session data for the
- * previous week.
- */
-function gd_renderWeekOverWeekChart() {
-	if(ga_data1 && ga_data2){
-		if (typeof ga_data1.screenPageViews !== 'undefined') {
-			try {
-				ga_data1.rows = ga_data1['screenPageViews']['thisweek']['rows'];
-			} catch(err) {}
-		}
-		if (typeof ga_data2.screenPageViews !== 'undefined') {
-			try {
-				ga_data2.rows = ga_data2['screenPageViews']['lastweek']['rows'];
-			} catch(err) {}
-		}
-		thisWeek = ga_data1;
-		lastWeek = ga_data2;
-		ga_data1 = false;
-		ga_data2 = false;
-	}else{
-		return;
-	}
-
-	jQuery('#gdga-chart-container').show();
-	gdga_refresh(true);
-	jQuery('.gdga-type-container').show();
-	jQuery('#gdga-select-analytic').prop('disabled', false);
-
-	// Adjust `now` to experiment with different days, for testing only...
-	var now = moment();
-
-	Promise.all([thisWeek, lastWeek]).then(function(results) {
-		var data1 = results && results[0] && results[0].rows ? results[0].rows.map(function(row) { return +row[2]; }) : [];
-		var data2 = results && results[1] && results[1].rows ? results[1].rows.map(function(row) { return +row[2]; }) : [];
-		<?php
-		// Here we list the shorthand days of the week so it can be used in translation.
-		__("Mon",'geodir-ga');
-		__("Tue",'geodir-ga');
-		__("Wed",'geodir-ga');
-		__("Thu",'geodir-ga');
-		__("Fri",'geodir-ga');
-		__("Sat",'geodir-ga');
-		__("Sun",'geodir-ga');
+		/* Here we list the shorthand days of the week so it can be used in translation. */
+		__( "Mon", 'geodir-ga' );
+		__( "Tue", 'geodir-ga' );
+		__( "Wed", 'geodir-ga' );
+		__( "Thu", 'geodir-ga' );
+		__( "Fri", 'geodir-ga' );
+		__( "Sat", 'geodir-ga' );
+		__( "Sun", 'geodir-ga' );
 		?>
-
-		var labels = [
-			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+1 day" ) ) ); ?>"),
-			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+2 day" ) ) ); ?>"),
-			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+3 day" ) ) ); ?>"),
-			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+4 day" ) ) ); ?>"),
-			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+5 day" ) ) ); ?>"),
-			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+6 day" ) ) ); ?>"),
-			geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+7 day" ) ) ); ?>")
-		];
-
-		var data = {
-			labels : labels,
-			datasets : [
-				{
-					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Week', 'geodir-ga' ) ); ?>'),
-					borderColor:'rgb(255,159,64)',
-					backgroundColor:'rgba(255,159,64,0.5)',
-					data : data2
-				},
-				{
-					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Week', 'geodir-ga' ) ); ?>'),
-					borderColor:'rgb(54,162,235)',
-					backgroundColor:'rgba(54,162,235,0.5)',
-					data : data1
-				}
-			]
-		};
-
-		new Chart(makeCanvas('gdga-chart-container'),{type:'line',data:data});
-	});
-}
-
-function gd_renderMonthOverMonthChart() {
-	if(ga_data1 && ga_data2){
-		if (typeof ga_data1.screenPageViews !== 'undefined') {
-			try {
-				ga_data1.rows = ga_data1['screenPageViews']['thismonth']['rows'];
-			} catch(err) {}
-		}
-		if (typeof ga_data2.screenPageViews !== 'undefined') {
-			try {
-				ga_data2.rows = ga_data2['screenPageViews']['lastmonth']['rows'];
-			} catch(err) {}
-		}
-		thisMonth = ga_data1;
-		lastMonth = ga_data2;
-		ga_data1 = false;
-		ga_data2 = false;
-	}else{
-		return;
-	}
-
-	jQuery('#gdga-chart-container').show();
-	gdga_refresh(true);
-	jQuery('.gdga-type-container').show();
-	jQuery('#gdga-select-analytic').prop('disabled', false);
-
-	// Adjust `now` to experiment with different days, for testing only...
-	var now = moment();
-
-	Promise.all([thisMonth, lastMonth]).then(function(results) {
-		var data1 = results && results[0] && results[0].rows ? results[0].rows.map(function(row) { return +row[2]; }) : [];
-		var data2 = results && results[1] && results[1].rows ? results[1].rows.map(function(row) { return +row[2]; }) : [];
-		var labels = [<?php echo implode( ",", $month_days ) ?>];
-		
-		for (var i = 0, len = labels.length; i < len; i++) {
-			if (data1[i] === undefined) data1[i] = null;
-			if (data2[i] === undefined) data2[i] = 0;
-		}
-
-		var data = {
-			labels : labels,
-			datasets : [
-				{
-					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Month', 'geodir-ga' ) ); ?>'),
-					borderColor:'rgb(255,159,64)',
-					backgroundColor:'rgba(255,159,64,0.5)',
-					data : data2
-				},
-				{
-					label: geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Month', 'geodir-ga' ) ); ?>'),
-					borderColor:'rgb(54,162,235)',
-					backgroundColor:'rgba(54,162,235,0.5)',
-					data : data1
-				}
-			]
-		};
-
-		new Chart(makeCanvas('gdga-chart-container'),{type:'line',data:data});
-	});
-}
-
-/**
- * Create a new canvas inside the specified element. Set it to be the width
- * and height of its container.
- * @param {string} id The id attribute of the element to host the canvas.
- * @return {RenderingContext} The 2D canvas context.
- */
-function makeCanvas(id) {
-	var container = document.getElementById(id);
-	var canvas = document.createElement('canvas');
-	var ctx = canvas.getContext('2d');
-
-	container.innerHTML = '';
-	canvas.width = container.offsetWidth;
-	canvas.height = container.offsetHeight;
-	container.appendChild(canvas);
-
-	return ctx;
-}
-
-function gdga_select_option() {
-	jQuery('#gdga-select-analytic').prop('disabled', true);
-	gdga_refresh();
-
-	gaType = jQuery('#gdga-select-analytic').val();
-
-	if (gaType == 'weeks') {
-		gdga_weekVSweek();
-	} else if (gaType == 'months') {
-		gdga_monthVSmonth();
-	} else if (gaType == 'years') {
-		gdga_yearVSyear();
-	} else if (gaType == 'country') {
-		gdga_country();
-	}
-}
-
-function gdga_refresh(stop) {
-	if (typeof stop !== 'undefined' && stop) {
-		if (gd_gaAutoRefresh === 1 || gd_gaHideRefresh == 1) {
-			jQuery('#gdga-loader-icon').hide();
-		} else {
-			jQuery('#gdga-loader-icon .fa-sync').removeClass('fa-spin');
-		}
-	} else {
-		if (gd_gaAutoRefresh === 1 || gd_gaHideRefresh == 1) {
-			jQuery('#gdga-loader-icon').show();
-		} else {
-			if (!jQuery('#gdga-loader-icon .fa-sync').hasClass('fa-spin')) {
-				jQuery('#gdga-loader-icon .fa-sync').addClass('fa-spin');
-			}
-		}
-	}
-}
-
-function geodir_ga_htmlEscape(str) {
-	return String(str)
-		.replace(/&prime;/g, "'")
-		.replace(/&frasl;/g, '/')
-		.replace(/&ndash;/g, '-')
-		.replace(/&ldquo;/g, '"')
-		.replace(/&gt;/g, '>')
-		.replace(/&quot;/g, '"')
-		.replace(/&apos;/g, "'")
-		.replace(/&amp;quot;/g, '"')
-		.replace(/&amp;apos;/g, "'");
-}
+<script type="text/javascript">
+var gd_gaTimeOut,gd_gaTime=<?php echo absint( $refresh_time ); ?>,gd_gaHideRefresh=<?php echo (int) $hide_refresh; ?>,gd_gaAutoRefresh=<?php echo (int) $auto_refresh; ?>,gd_gaPageToken="<?php echo esc_attr( geodir_ga_get_page_access_token( $args['user_roles'] ) ); ?>",ga_data1=false,ga_data2=false,ga_data3=false,ga_data4=false,ga_data5=false,ga_data6=false,ga_au=0;
+jQuery(function(){Chart.defaults.animationSteps=60;Chart.defaults.animationEasing="easeInOutQuart";Chart.defaults.responsive=true;Chart.defaults.maintainAspectRatio=false;jQuery(".gdga-show-analytics").on("click",function(e){jQuery(this).hide();jQuery(".gdga-analytics-box").show();gdga_weekVSweek();gdga_realtime(true)});if(gd_gaAutoRefresh!==1){jQuery("#gdga-loader-icon").on("click",function(e){gdga_refresh();clearTimeout(gd_gaTimeOut);gdga_realtime()})}});
+function gdga_weekVSweek(){jQuery.ajax({url:"<?php echo ( admin_url( 'admin-ajax.php?action=geodir_ga_stats&ga_page=' . $page_url . '&ga_type=thisweek&ga_post=' . $post->ID ) ); ?>&pt="+gd_gaPageToken,beforeSend:function(){jQuery("#gdga-chart-container").css({opacity:.6})},success:function(result){ga_data1=jQuery.parseJSON(result);if(ga_data1.error){jQuery("#ga_stats").html(result);return}gd_renderWeekOverWeekChart();jQuery("#gdga-chart-container").css({opacity:1})},error:function(xhr,textStatus,errorThrown){jQuery("#gdga-chart-container").css({opacity:1})}});jQuery.ajax({url:"<?php echo ( admin_url( 'admin-ajax.php?action=geodir_ga_stats&ga_page=' . $page_url . '&ga_type=lastweek&ga_post=' . $post->ID ) ); ?>&pt="+gd_gaPageToken,success:function(result){ga_data2=jQuery.parseJSON(result);gd_renderWeekOverWeekChart()}});}
+function gdga_monthVSmonth(){jQuery.ajax({url:"<?php echo ( admin_url( 'admin-ajax.php?action=geodir_ga_stats&ga_page=' . $page_url . '&ga_type=thismonth&ga_post=' . $post->ID ) ); ?>&pt="+gd_gaPageToken,beforeSend:function(){jQuery("#gdga-chart-container").css({opacity:.6})},success:function(result){ga_data1=jQuery.parseJSON(result);if(ga_data1.error){jQuery("#ga_stats").html(result);return}gd_renderMonthOverMonthChart();jQuery("#gdga-chart-container").css({opacity:1})},error:function(xhr,textStatus,errorThrown){jQuery("#gdga-chart-container").css({opacity:1})}});jQuery.ajax({url:"<?php echo ( admin_url( 'admin-ajax.php?action=geodir_ga_stats&ga_page=' . $page_url . '&ga_type=lastmonth&ga_post=' . $post->ID ) ); ?>&pt="+gd_gaPageToken,success:function(result){ga_data2=jQuery.parseJSON(result);gd_renderMonthOverMonthChart()}})}
+function gdga_yearVSyear(){jQuery.ajax({url:"<?php echo ( admin_url( 'admin-ajax.php?action=geodir_ga_stats&ga_page=' . $page_url . '&ga_type=thisyear&ga_post=' . $post->ID ) ); ?>&pt="+gd_gaPageToken,beforeSend:function(){jQuery("#gdga-chart-container").css({opacity:.6})},success:function(result){ga_data3=jQuery.parseJSON(result);if(ga_data3.error){jQuery("#ga_stats").html(result);return}gd_renderYearOverYearChart();jQuery("#gdga-chart-container").css({opacity:1})},error:function(xhr,textStatus,errorThrown){jQuery("#gdga-chart-container").css({opacity:1})}});jQuery.ajax({url:"<?php echo ( admin_url( 'admin-ajax.php?action=geodir_ga_stats&ga_page=' . $page_url . '&ga_type=lastyear&ga_post=' . $post->ID ) ); ?>&pt="+gd_gaPageToken,success:function(result){ga_data4=jQuery.parseJSON(result);gd_renderYearOverYearChart()}})}
+function gdga_country(){jQuery.ajax({url:"<?php echo ( admin_url( 'admin-ajax.php?action=geodir_ga_stats&ga_page=' . $page_url . '&ga_type=country&ga_post=' . $post->ID ) ); ?>&pt="+gd_gaPageToken,beforeSend:function(){jQuery("#gdga-chart-container").css({opacity:.6})},success:function(result){ga_data5=jQuery.parseJSON(result);if(ga_data5.error){jQuery("#ga_stats").html(result);return}gd_renderTopCountriesChart();jQuery("#gdga-chart-container").css({opacity:1})},error:function(xhr,textStatus,errorThrown){jQuery("#gdga-chart-container").css({opacity:1})}})}
+function gdga_realtime(dom_ready){jQuery.ajax({url:"<?php echo ( admin_url( 'admin-ajax.php?action=geodir_ga_stats&ga_page=' . $page_url .'&ga_type=realtime&ga_post=' . $post->ID ) ); ?>"+geodir_analytics_title_arg()+"&pt="+gd_gaPageToken,success:function(result){ga_data6=jQuery.parseJSON(result);if(ga_data6.error){jQuery("#ga_stats").html(result);return}gd_renderRealTime(dom_ready)}})}
+function geodir_analytics_title_arg(){var title=jQuery("title:first").text();if(title){title=encodeURIComponent(title)}return"&ga_title="+title}
+function gd_renderRealTime(dom_ready){if(typeof dom_ready==="undefined"){gdga_refresh(true)}ga_au_old=ga_au;if(ga_data6&&typeof ga_data6=="object"&&ga_data6.activeUsers&&ga_data6.activeUsers.realtime){ga_au=typeof ga_data6.activeUsers.realtime.totalActiveUsers!="undefined"?ga_data6.activeUsers.realtime.totalActiveUsers:0}else{ga_au=ga_data6&&typeof ga_data6=="object"&&ga_data6.totalsForAllResults?ga_data6.totalsForAllResults["rt:activeUsers"]:0}if(ga_au>ga_au_old){jQuery(".gd-ActiveUsers").addClass("is-increasing")}if(ga_au<ga_au_old){jQuery(".gd-ActiveUsers").addClass("is-decreasing")}jQuery(".gd-ActiveUsers-value").html(ga_au);if(gd_gaTime>0&&gd_gaAutoRefresh===1){gd_gaTimeOut=setTimeout(function(){jQuery(".gd-ActiveUsers").removeClass("is-increasing is-decreasing");gdga_realtime()},gd_gaTime)}}
+function gd_renderTopCountriesChart(){if (ga_data5){response = ga_data5;ga_data5 = false;} else{return;}jQuery('#gdga-chart-container').show();gdga_refresh(true);jQuery('.gdga-type-container').show();jQuery('#gdga-select-analytic').prop('disabled', false);var rows = [];if (typeof response.screenPageViews !== 'undefined'){try{rows = response['screenPageViews']['country']['rows'];} catch(err){}} else{rows = response.rows;}var labels = [];var values = [];var bgcolors = [];var colors = ['rgb(255,165,0)', 'rgb(255,0,0)', 'rgb(128,0,128)','rgb(54,162,235)', 'rgb(0,128,0)', 'rgb(0,0,255)', 'rgb(192,192,192)', 'rgb(128,0,0)', 'rgb(255,127,80)', '189,183,107)', 'rgb(255,215,0)'];if (rows.length){rows.forEach(function(row, i){labels[i] = row[0];values[i] = parseInt(row[1]);bgcolors[i] = colors[i];});var data ={labels:labels,datasets:[{label:'<?php echo addslashes( __( 'Countries', 'geodir-ga' ) );?>',data:values,backgroundColor:bgcolors,hoverOffset:4}]};new Chart(geodirGaMakeCanvas('gdga-chart-container'),{type:'doughnut',data:data});}else{gdga_noResults();}}
+function gd_renderYearOverYearChart(){if(ga_data3&&ga_data4){if(typeof ga_data3.screenPageViews!=="undefined"){try{ga_data3.rows=ga_data3["screenPageViews"]["thisyear"]["rows"]}catch(err){}}if(typeof ga_data4.screenPageViews!=="undefined"){try{ga_data4.rows=ga_data4["screenPageViews"]["lastyear"]["rows"]}catch(err){}}thisYear=ga_data3;lastYear=ga_data4;ga_data3=false;ga_data4=false}else{return}jQuery("#gdga-chart-container").show();gdga_refresh(true);jQuery(".gdga-type-container").show();jQuery("#gdga-select-analytic").prop("disabled",false);var now=moment();Promise.all([thisYear, lastYear]).then(function(results){var data1=results && results[0] && results[0].rows ? results[0].rows.map(function(row){return +row[2];}):[];var data2=results && results[1] && results[1].rows ? results[1].rows.map(function(row){return +row[2];}):[];var labels=[geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jan', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Feb', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Mar', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Apr', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'May', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jun', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Jul', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Aug', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Sep', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Oct', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Nov', 'geodir-ga' ) ); ?>'),geodir_ga_htmlEscape('<?php echo esc_js( __( 'Dec', 'geodir-ga' ) ); ?>')];for (var i=0,len=labels.length;i < len;i++){if(data1[i]===undefined) data1[i]=null;if (data2[i]===undefined) data2[i]=null;}var data={labels:labels,datasets:[{label:geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Year', 'geodir-ga' ) ); ?>'),borderColor:'rgb(255,159,64)',backgroundColor:'rgba(255,159,64,0.5)',data:data2},{label:geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Year', 'geodir-ga' ) ); ?>'),borderColor:'rgb(54,162,235)',backgroundColor:'rgba(54,162,235,0.5)',data:data1}]};new Chart(geodirGaMakeCanvas('gdga-chart-container'),{type:'bar',data:data});}).catch(function(err){console.error(err.stack);})}
+function gd_renderWeekOverWeekChart(){if(ga_data1&&ga_data2){if(typeof ga_data1.screenPageViews!=="undefined"){try{ga_data1.rows=ga_data1["screenPageViews"]["thisweek"]["rows"]}catch(err){}}if(typeof ga_data2.screenPageViews!=="undefined"){try{ga_data2.rows=ga_data2["screenPageViews"]["lastweek"]["rows"]}catch(err){}}thisWeek=ga_data1;lastWeek=ga_data2;ga_data1=false;ga_data2=false}else{return;}jQuery('#gdga-chart-container').show();gdga_refresh(true);jQuery('.gdga-type-container').show();jQuery('#gdga-select-analytic').prop('disabled', false);var now=moment();Promise.all([thisWeek, lastWeek]).then(function(results){var data1=results && results[0] && results[0].rows ? results[0].rows.map(function(row){return +row[2];}):[];var data2=results && results[1] && results[1].rows ? results[1].rows.map(function(row){return +row[2];}):[];var labels=[geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+1 day" ) ) ); ?>"),geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+2 day" ) ) ); ?>"),geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+3 day" ) ) ); ?>"),geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+4 day" ) ) ); ?>"),geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+5 day" ) ) ); ?>"),geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+6 day" ) ) ); ?>"),geodir_ga_htmlEscape("<?php echo esc_js( date_i18n( 'D', strtotime( "+7 day" ) ) ); ?>")];var data ={labels:labels,datasets:[{label:geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Week', 'geodir-ga' ) ); ?>'),borderColor:'rgb(255,159,64)',backgroundColor:'rgba(255,159,64,0.5)',data:data2},{label:geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Week', 'geodir-ga' ) ); ?>'),borderColor:'rgb(54,162,235)',backgroundColor:'rgba(54,162,235,0.5)',data:data1}]};new Chart(geodirGaMakeCanvas('gdga-chart-container'),{type:'line',data:data});});}
+function gd_renderMonthOverMonthChart(){if(ga_data1&&ga_data2){if(typeof ga_data1.screenPageViews!=="undefined"){try{ga_data1.rows=ga_data1["screenPageViews"]["thismonth"]["rows"]}catch(err){}}if(typeof ga_data2.screenPageViews!=="undefined"){try{ga_data2.rows=ga_data2["screenPageViews"]["lastmonth"]["rows"]}catch(err){}}thisMonth=ga_data1;lastMonth=ga_data2;ga_data1=false;ga_data2=false}else{return}jQuery("#gdga-chart-container").show();gdga_refresh(true);jQuery(".gdga-type-container").show();jQuery("#gdga-select-analytic").prop("disabled",false);var now=moment();Promise.all([thisMonth, lastMonth]).then(function(results){var data1=results && results[0] && results[0].rows ? results[0].rows.map(function(row){return +row[2];}):[];var data2=results && results[1] && results[1].rows ? results[1].rows.map(function(row){return +row[2];}):[];var labels=[<?php echo implode( ",", $month_days ) ?>];for (var i=0, len=labels.length; i < len; i++){if (data1[i] === undefined) data1[i]=null;if (data2[i] === undefined) data2[i]=0;}var data ={labels:labels,datasets:[{label:geodir_ga_htmlEscape('<?php echo esc_js( __( 'Last Month', 'geodir-ga' ) ); ?>'),borderColor:'rgb(255,159,64)',backgroundColor:'rgba(255,159,64,0.5)',data:data2},{label:geodir_ga_htmlEscape('<?php echo esc_js( __( 'This Month', 'geodir-ga' ) ); ?>'),borderColor:'rgb(54,162,235)',backgroundColor:'rgba(54,162,235,0.5)',data:data1}]};new Chart(geodirGaMakeCanvas('gdga-chart-container'),{type:'line',data:data});});}
+function gdga_noResults(){jQuery('#gdga-chart-container').html('<p>' + geodir_ga_htmlEscape('<?php echo esc_js( __( 'No results available', 'geodir-ga' ) ); ?>') + '</p>');}
+function geodirGaMakeCanvas(id){var container=document.getElementById(id);var canvas=document.createElement("canvas");var ctx=canvas.getContext("2d");container.innerHTML="";canvas.width=container.offsetWidth;canvas.height=container.offsetHeight;container.appendChild(canvas);return ctx}
+function gdga_select_option(){jQuery("#gdga-select-analytic").prop("disabled",true);gdga_refresh();gaType=jQuery("#gdga-select-analytic").val();if(gaType=="weeks"){gdga_weekVSweek()}else if(gaType=="months"){gdga_monthVSmonth()}else if(gaType=="years"){gdga_yearVSyear()}else if(gaType=="country"){gdga_country()}}
+function gdga_refresh(stop){if(typeof stop!=="undefined"&&stop){if(gd_gaAutoRefresh===1||gd_gaHideRefresh==1){jQuery("#gdga-loader-icon").hide()}else{jQuery("#gdga-loader-icon .fa-sync").removeClass("fa-spin")}}else{if(gd_gaAutoRefresh===1||gd_gaHideRefresh==1){jQuery("#gdga-loader-icon").show()}else{if(!jQuery("#gdga-loader-icon .fa-sync").hasClass("fa-spin")){jQuery("#gdga-loader-icon .fa-sync").addClass("fa-spin")}}}}
+function geodir_ga_htmlEscape(str){return String(str).replace(/&prime;/g,"'").replace(/&frasl;/g,"/").replace(/&ndash;/g,"-").replace(/&ldquo;/g,'"').replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;quot;/g,'"').replace(/&amp;apos;/g,"'")}
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -885,33 +397,8 @@ function geodir_ga_htmlEscape(str) {
 			</div>
 		</div>
 <?php } else { ?>
-<style>
-#gdga-chart-container{clear:both}
-.gdga-type-container{width:100%;display:block;clear:both}
-.gdga-type-container > .select2-container{width:100% !important}
-.geodir-details-sidebar-google-analytics{min-height:60px}
-#ga_stats #gd-active-users-container{float:right;margin:0 0 10px}
-#gdga-select-analytic{clear:both;width:100%}
-#ga_stats #ga-analytics-title{float:left;font-weight:bold}
-#ga_stats #gd-active-users-container{float:right}
-.Chartjs{font-size:.85em}
-.Chartjs-figure{height:<?php echo absint( $args['height'] ); ?>px;width:100%;display:none}
-.Chartjs-legend{list-style:none;margin:0;padding:1em 0 0;text-align:center;width:100%;display:none}
-.Chartjs-legend>li{display:inline-block;padding:.25em .5em}
-.Chartjs-legend>li>i{display:inline-block;height:1em;margin-right:.5em;vertical-align:-.1em;width:1em}
-@media (min-width:570px){.Chartjs-figure{margin-right:1.5em}}
-.gd-ActiveUsers{background:#f3f2f0;border:1px solid #d4d2d0;border-radius:4px;font-weight:300;padding:.5em 1.5em;white-space:nowrap}
-.gd-ActiveUsers-value{display:inline-block;font-weight:600;margin-right:-.25em}
-.gd-ActiveUsers.is-increasing{-webkit-animation:increase 3s;animation:increase 3s}
-.gd-ActiveUsers.is-decreasing{-webkit-animation:decrease 3s;animation:decrease 3s}
-@-webkit-keyframes increase{10%{background-color:#eaffea;border-color:hsla(120,100%,25%,.5);color:hsla(120,100%,25%,1)}}
-@keyframes increase{10%{background-color:#eaffea;border-color:hsla(120,100%,25%,.5);color:hsla(120,100%,25%,1)}}
-@-webkit-keyframes decrease{10%{background-color:#ffeaea;border-color:hsla(0,100%,50%,.5);color:red}}
-@keyframes decrease{10%{background-color:#ffeaea;border-color:hsla(0,100%,50%,.5);color:red}}
-#gdga-loader-icon svg,#gdga-loader-icon i{margin:0 10px 0 -10px;color:#333333;cursor:pointer}
-.#gdga-loader-icon .fa-spin{-webkit-animation-duration:1.5s;animation-duration:1.5s}
- </style>
-        <button type="button" class="gdga-show-analytics"><?php echo !empty($args['button_text']) ? esc_attr($args['button_text']) : __('Show Google Analytics', 'geodir-ga');?></button>
+<style>#gdga-chart-container{clear:both}.gdga-type-container{width:100%;display:block;clear:both}.gdga-type-container > .select2-container{width:100% !important}.geodir-details-sidebar-google-analytics{min-height:60px}#ga_stats #gd-active-users-container{float:right;margin:0 0 10px}#gdga-select-analytic{clear:both;width:100%}#ga_stats #ga-analytics-title{float:left;font-weight:bold}#ga_stats #gd-active-users-container{float:right}.Chartjs{font-size:.85em}.Chartjs-figure{height:<?php echo absint( $args['height'] ); ?>px;width:100%;display:none}.Chartjs-legend{list-style:none;margin:0;padding:1em 0 0;text-align:center;width:100%;display:none}.Chartjs-legend>li{display:inline-block;padding:.25em .5em}.Chartjs-legend>li>i{display:inline-block;height:1em;margin-right:.5em;vertical-align:-.1em;width:1em}@media (min-width:570px){.Chartjs-figure{margin-right:1.5em}}.gd-ActiveUsers{background:#f3f2f0;border:1px solid #d4d2d0;border-radius:4px;font-weight:300;padding:.5em 1.5em;white-space:nowrap}.gd-ActiveUsers-value{display:inline-block;font-weight:600;margin-right:-.25em}.gd-ActiveUsers.is-increasing{-webkit-animation:increase 3s;animation:increase 3s}.gd-ActiveUsers.is-decreasing{-webkit-animation:decrease 3s;animation:decrease 3s}@-webkit-keyframes increase{10%{background-color:#eaffea;border-color:hsla(120,100%,25%,.5);color:hsla(120,100%,25%,1)}}@keyframes increase{10%{background-color:#eaffea;border-color:hsla(120,100%,25%,.5);color:hsla(120,100%,25%,1)}}@-webkit-keyframes decrease{10%{background-color:#ffeaea;border-color:hsla(0,100%,50%,.5);color:red}}@keyframes decrease{10%{background-color:#ffeaea;border-color:hsla(0,100%,50%,.5);color:red}}#gdga-loader-icon svg,#gdga-loader-icon i{margin:0 10px 0 -10px;color:#333333;cursor:pointer}.#gdga-loader-icon .fa-spin{-webkit-animation-duration:1.5s;animation-duration:1.5s} </style>
+        <button type="button" class="gdga-show-analytics"><?php echo !empty($args['button_text']) ? esc_attr($args['button_text']) : esc_html__( 'Show Google Analytics', 'geodir-ga' );?></button>
         <span id="ga_stats" class="gdga-analytics-box" style="display:none">
             <div id="ga-analytics-title"><?php _e("Analytics", 'geodir-ga');?></div>
             <div id="gd-active-users-container">
