@@ -3,7 +3,7 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: geodirectory, ga4, google analytics, geodirectory google analytics, tracking
 Requires at least: 4.9
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 5.6
 Stable tag: 2.3.3
 License: GPLv3
@@ -34,6 +34,10 @@ Yes
 == Screenshots ==
 
 == Changelog ==
+
+= 2.3.4 - TBD =
+* Chart.js updated to v3.9 - CHANGED
+* Show week, month chart lines curved - CHANGED
 
 = 2.3.3 - 2024-05-30 =
 * Sometimes restricted HTTP_REFERRER in AJAX request breaks analytics - FIXED
