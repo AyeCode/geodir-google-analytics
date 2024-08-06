@@ -5,7 +5,7 @@ Tags: geodirectory, ga4, google analytics, geodirectory google analytics, tracki
 Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 5.6
-Stable tag: 2.3.3
+Stable tag: 2.3.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,7 +35,7 @@ Yes
 
 == Changelog ==
 
-= 2.3.4 - TBD =
+= 2.3.4 - 2024-08-06 =
 * Chart.js updated to v3.9 - CHANGED
 * Show week, month chart lines curved - CHANGED
 

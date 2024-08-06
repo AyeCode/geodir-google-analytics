@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory Google Analytics 2.3.3\n"
+"Project-Id-Version: GeoDirectory Google Analytics 2.3.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-30 20:44+0530\n"
-"PO-Revision-Date: 2024-05-30 20:44+0530\n"
+"POT-Creation-Date: 2024-08-06 17:52+0530\n"
+"PO-Revision-Date: 2024-08-06 17:52+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -221,162 +221,166 @@ msgstr ""
 msgid "Please check Google Analytics Settings"
 msgstr ""
 
-#: includes/functions.php:159
+#: includes/functions.php:161
 msgid "Google Analytics account property view is not setup properly!"
 msgstr ""
 
-#: includes/functions.php:201
+#: includes/functions.php:221
 msgid "Invalid access."
 msgstr ""
 
-#: includes/functions.php:207
+#: includes/functions.php:227
 msgid ""
 "Not authorized, please click authorized in GD > Google Analytics settings."
 msgstr ""
 
-#: includes/functions.php:225
+#: includes/functions.php:245
 msgid "Login failed"
 msgstr ""
 
-#: includes/functions.php:314
+#: includes/functions.php:334
 msgid "Mon"
 msgstr ""
 
-#: includes/functions.php:315
+#: includes/functions.php:335
 msgid "Tue"
 msgstr ""
 
-#: includes/functions.php:316
+#: includes/functions.php:336
 msgid "Wed"
 msgstr ""
 
-#: includes/functions.php:317
+#: includes/functions.php:337
 msgid "Thu"
 msgstr ""
 
-#: includes/functions.php:318
+#: includes/functions.php:338
 msgid "Fri"
 msgstr ""
 
-#: includes/functions.php:319
+#: includes/functions.php:339
 msgid "Sat"
 msgstr ""
 
-#: includes/functions.php:320
+#: includes/functions.php:340
 msgid "Sun"
 msgstr ""
 
-#: includes/functions.php:332
+#: includes/functions.php:352
 msgid "Countries"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:352 includes/functions.php:407
+#: includes/functions.php:433
+msgid "Top Countries"
+msgstr ""
+
+#: includes/functions.php:353
 msgid "Jan"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Feb"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Mar"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Apr"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "May"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Jun"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Jul"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Aug"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Sep"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Oct"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Nov"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Dec"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "Last Year"
 msgstr ""
 
-#: includes/functions.php:333
+#: includes/functions.php:353
 msgid "This Year"
 msgstr ""
 
-#: includes/functions.php:334
+#: includes/functions.php:353 includes/functions.php:406
+#: includes/functions.php:432
+msgid "This Year vs Last Year"
+msgstr ""
+
+#: includes/functions.php:354
 msgid "Last Week"
 msgstr ""
 
-#: includes/functions.php:334
+#: includes/functions.php:354
 msgid "This Week"
 msgstr ""
 
-#: includes/functions.php:335
+#: includes/functions.php:354 includes/functions.php:404
+#: includes/functions.php:430
+msgid "This Week vs Last Week"
+msgstr ""
+
+#: includes/functions.php:355
 msgid "Last Month"
 msgstr ""
 
-#: includes/functions.php:335
+#: includes/functions.php:355
 msgid "This Month"
 msgstr ""
 
-#: includes/functions.php:336
+#: includes/functions.php:355 includes/functions.php:405
+#: includes/functions.php:431
+msgid "This Month vs Last Month"
+msgstr ""
+
+#: includes/functions.php:356
 msgid "No results available"
 msgstr ""
 
-#: includes/functions.php:366
+#: includes/functions.php:386
 #: includes/widgets/class-geodir-google-analytics-widget-post-analytics.php:89
 msgid "Show Google Analytics"
 msgstr ""
 
-#: includes/functions.php:369 includes/functions.php:405
+#: includes/functions.php:389 includes/functions.php:425
 msgid "Refresh"
 msgstr ""
 
-#: includes/functions.php:369 includes/functions.php:405
+#: includes/functions.php:389 includes/functions.php:425
 msgid "Active Users:"
 msgstr ""
 
-#: includes/functions.php:370 includes/functions.php:403
+#: includes/functions.php:390 includes/functions.php:423
 msgid "Analytics"
-msgstr ""
-
-#: includes/functions.php:384 includes/functions.php:410
-msgid "Last Week vs This Week"
-msgstr ""
-
-#: includes/functions.php:385 includes/functions.php:411
-msgid "This Month vs Last Month"
-msgstr ""
-
-#: includes/functions.php:386 includes/functions.php:412
-msgid "This Year vs Last Year"
-msgstr ""
-
-#: includes/functions.php:387 includes/functions.php:413
-msgid "Top Countries"
 msgstr ""
 
 #: includes/widgets/class-geodir-google-analytics-widget-post-analytics.php:43
