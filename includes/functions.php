@@ -522,6 +522,13 @@ function geodir_ga_validate_page_access_token( $token, $path ) {
 	return $result;
 }
 
+/**
+ * Enqueue script.
+ *
+ * @since 2.3.5
+ *
+ * @return mixed.
+ */
 function geodir_ga_enqueue_scripts( $args ) {
 	// Chart JS
 	wp_register_script( 'chartjs', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.0/chart.min.js', array( 'jquery' ), '3.9.0', array( 'in_footer' => true ) );
@@ -535,6 +542,13 @@ function geodir_ga_enqueue_scripts( $args ) {
 	wp_add_inline_script( 'momentjs', geodir_ga_get_inline_script( $args ) );
 }
 
+/**
+ * Get inline script.
+ *
+ * @since 2.3.5
+ *
+ * @return string Inline script.
+ */
 function geodir_ga_get_inline_script( $args ) {
 	global $post;
 

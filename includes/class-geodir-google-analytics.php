@@ -147,9 +147,7 @@ class GeoDir_Google_Analytics {
 	 * @return void
 	 */
 	public function load_textdomain() {
-		global $wp_version;
-
-		$locale = $wp_version >= 4.7 ? get_user_locale() : get_locale();
+		$locale = determine_locale();
 
 		/**
 		 * Filter the plugin locale.
@@ -158,8 +156,9 @@ class GeoDir_Google_Analytics {
 		 */
 		$locale = apply_filters( 'plugin_locale', $locale, 'geodir-ga' );
 
+		unload_textdomain( 'geodir-ga', true );
 		load_textdomain( 'geodir-ga', WP_LANG_DIR . '/geodir-ga/geodir-ga-' . $locale . '.mo' );
-		load_plugin_textdomain( 'geodir-ga', FALSE, basename( dirname( GEODIR_GA_PLUGIN_FILE ) ) . '/languages/' );
+		load_plugin_textdomain( 'geodir-ga', false, basename( dirname( GEODIR_GA_PLUGIN_FILE ) ) . '/languages/' );
 	}
 
 	/**

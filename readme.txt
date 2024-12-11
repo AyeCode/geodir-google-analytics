@@ -2,10 +2,10 @@
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: geodirectory, ga4, google analytics, geodirectory google analytics, tracking
-Requires at least: 4.9
+Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: 2.3.4
+Stable tag: 2.3.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,7 +35,7 @@ Yes
 
 == Changelog ==
 
-= 2.3.5 - TBD =
+= 2.3.5 - 2024-12-11 =
 * Analytics shows JS error when rendered via FSE theme block - FIXED
 * PHP v8.3 compatibility changes - CHANGED
 
