@@ -19,6 +19,7 @@ class GeoDir_Google_Analytics_API {
 	var $accountId;
 	var $baseFeed = 'https://www.googleapis.com/analytics/v3';
 	var $token = false;
+	public $analytics;
 
 	/**
 	 * Constructor

@@ -37,6 +37,7 @@ Yes
 
 = 2.3.5 - TBD =
 * Analytics shows JS error when rendered via FSE theme block - FIXED
+* PHP v8.3 compatibility changes - CHANGED
 
 = 2.3.4 - 2024-08-06 =
 * Chart.js updated to v3.9 - CHANGED
