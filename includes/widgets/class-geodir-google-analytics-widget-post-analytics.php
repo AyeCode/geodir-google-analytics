@@ -27,7 +27,7 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 			'block-icon'     => 'chart-bar',
 			'block-category' => 'geodirectory',
 			'block-keywords' => "['analytics','geodirectory','google']",
-			'block-output'   => array(
+			'block-outputx'   => array(
 				array(
 					'element'   => 'div',
 					'className' => '[%className%]',
@@ -172,11 +172,7 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 		$is_preview = $this->is_preview();
 		$block_preview = $this->is_block_content_call() || $is_preview;
 
-		if ( $block_preview ) {
-			return '';
-		}
-
-		if ( $preview || empty( $post ) ) {
+		if ( ! $block_preview && ( $preview || empty( $post ) ) ) {
 			return;
 		}
 
@@ -198,6 +194,7 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 		 * Parse incoming $args into an array and merge it with $defaults
 		 */
 		$options = wp_parse_args( $args, $defaults );
+		$options['block_preview'] = $block_preview;
 
 		/**
 		 * Filters the widget title.
@@ -217,13 +214,13 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 		}
 
 		$allow_roles = apply_filters( 'geodir_ga_widget_user_roles', $allow_roles, $widget_args, $this->id_base );
-		if ( empty( $allow_roles ) ) {
+		if ( empty( $allow_roles ) && ! $block_preview ) {
 			return;
 		}
 
 		$options['user_roles'] = $allow_roles[0]; // @todo we need to make this work for arrays.
 
-		if ( ! in_array( 'all', $allow_roles ) ) {
+		if ( ! in_array( 'all', $allow_roles ) && ! $block_preview ) {
 			if ( in_array( 'all-logged-in', $allow_roles ) ) {
 				$user_id = is_user_logged_in() ? get_current_user_id() : 0;
 				if ( empty( $user_id ) ) {
