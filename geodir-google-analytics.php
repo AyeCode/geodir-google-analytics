@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       GeoDirectory Google Analytics
  * Plugin URI:        https://wpgeodirectory.com/downloads/google-analytics/
- * Description:       Allows Google Analytics tracking for the listings (GA4 compatible).
+ * Description:       Allows Google Analytics 4 tracking for the listings.
  * Version:           2.3.5
  * Requires at least: 5.0
  * Requires PHP:      5.6

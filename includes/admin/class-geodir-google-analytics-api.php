@@ -141,12 +141,12 @@ class GeoDir_Google_Analytics_API {
 			return $properties;
 		}
 
-		$ua_properties = $this->get_ua_properties();
+		//$ua_properties = $this->get_ua_properties(); // GA 4 has replaced Universal Analytics after July 1, 2024.
 		$ga4_properties = $this->get_ga4_properties();
 
-		$properties = array_filter( $ua_properties + $ga4_properties );
+		//$properties = array_filter( $ua_properties + $ga4_properties );
 
-		geodir_update_option( 'ga_properties', $properties );
+		geodir_update_option( 'ga_properties', $ga4_properties );
 		geodir_update_option( 'ga_data_stream', '' );
 		geodir_update_option( 'ga_profile_view', '' );
 

@@ -3,17 +3,17 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: geodirectory, ga4, google analytics, geodirectory google analytics, tracking
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 5.6
 Stable tag: 2.3.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Allows Google Analytics tracking for the listings (GA4 compatible).
+Allows Google Analytics 4 tracking for the listings.
 
 == Description ==
 
-= Add Google Analytics for your users viewing (GA4 compatible) =
+= Add Google Analytics 4 for your users viewing =
 
 The GeoDirectory Google Analytics addon lets you easily add Google Analytics(GA4) tracking to your listings.
 
@@ -34,6 +34,9 @@ Yes
 == Screenshots ==
 
 == Changelog ==
+
+= 2.3.6 - TBD =
+* Remove Universal Analytics support as UA properties has stopped processing data - CHANGED
 
 = 2.3.5 - 2024-12-11 =
 * Analytics shows JS error when rendered via FSE theme block - FIXED

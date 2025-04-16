@@ -90,7 +90,7 @@ if ( ! class_exists( 'GeoDir_Settings_Analytics', false ) ) :
 						'name' => __( 'Google Analytics Settings', 'geodir-ga' ),
 						'type' => 'sectionstart', 
 						'id' => 'google_analytic_settings',
-						'desc' => aui()->alert( array( 'type'=> 'info', 'content'=> __( '<b>Google Analytics 4</b> is replacing <b>Universal Analytics</b>. On July 1, 2023 all standard Universal Analytics properties will stop processing data.<p class="mb-0">It\'s critical that you migrate your Universal Analytics property settings to <b><a href="https://support.google.com/analytics/answer/10089681" rel="noopener" target="_blank">Google Analytics 4</a></b>, or you will begin to lose data on July 1, 2023. <b><a href="https://support.google.com/analytics/answer/10759417" rel="noopener" target="_blank">Learn how</a></b> to migrate your settings from UA to GA4.</p>', 'geodir-ga' ) ) ),
+						'desc' => aui()->alert( array( 'type'=> 'info', 'content'=> __( '<b>Google Analytics 4</b> has replaced <b>Universal Analytics</b>. Starting from July 1, 2024 all standard Universal Analytics properties has stopped processing data.<p class="mb-0">If you are still using UA then it\'s critical that you migrate your Universal Analytics property settings to <b><a href="https://support.google.com/analytics/answer/10089681" rel="noopener" target="_blank">Google Analytics 4</a></b>. <b><a href="https://support.google.com/analytics/answer/11583528" rel="noopener" target="_blank">Learn how</a></b> to migrate from UA to GA4.</p>', 'geodir-ga' ) ) ),
 					),
 					array(
 						'name' => __( 'Enable output widget?', 'geodir-ga' ),
