@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory Google Analytics 2.3.5\n"
+"Project-Id-Version: GeoDirectory Google Analytics 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 17:39+0530\n"
-"PO-Revision-Date: 2024-12-11 17:39+0530\n"
+"POT-Creation-Date: 2025-04-17 17:25+0530\n"
+"PO-Revision-Date: 2025-04-17 17:25+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -71,15 +71,15 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:93
 msgid ""
-"<b>Google Analytics 4</b> is replacing <b>Universal Analytics</b>. On July "
-"1, 2023 all standard Universal Analytics properties will stop processing "
-"data.<p class=\"mb-0\">It's critical that you migrate your Universal "
-"Analytics property settings to <b><a href=\"https://support.google.com/"
-"analytics/answer/10089681\" rel=\"noopener\" target=\"_blank\">Google "
-"Analytics 4</a></b>, or you will begin to lose data on July 1, 2023. <b><a "
-"href=\"https://support.google.com/analytics/answer/10759417\" "
-"rel=\"noopener\" target=\"_blank\">Learn how</a></b> to migrate your "
-"settings from UA to GA4.</p>"
+"<b>Google Analytics 4</b> has replaced <b>Universal Analytics</b>. Starting "
+"from July 1, 2024 all standard Universal Analytics properties has stopped "
+"processing data.<p class=\"mb-0\">If you are still using UA then it's "
+"critical that you migrate your Universal Analytics property settings to "
+"<b><a href=\"https://support.google.com/analytics/answer/10089681\" "
+"rel=\"noopener\" target=\"_blank\">Google Analytics 4</a></b>. <b><a "
+"href=\"https://support.google.com/analytics/answer/11583528\" "
+"rel=\"noopener\" target=\"_blank\">Learn how</a></b> to migrate from UA to "
+"GA4.</p>"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:96
@@ -285,102 +285,102 @@ msgid "Analytics"
 msgstr ""
 
 #: includes/functions.php:370 includes/functions.php:396
-#: includes/functions.php:577
+#: includes/functions.php:591
 msgid "This Week vs Last Week"
 msgstr ""
 
 #: includes/functions.php:371 includes/functions.php:397
-#: includes/functions.php:578
+#: includes/functions.php:592
 msgid "This Month vs Last Month"
 msgstr ""
 
 #: includes/functions.php:372 includes/functions.php:398
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "This Year vs Last Year"
 msgstr ""
 
 #: includes/functions.php:373 includes/functions.php:399
-#: includes/functions.php:575
+#: includes/functions.php:589
 msgid "Top Countries"
 msgstr ""
 
-#: includes/functions.php:575
+#: includes/functions.php:589
 msgid "Countries"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Jan"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Feb"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Mar"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Apr"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "May"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Jun"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Jul"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Aug"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Sep"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Oct"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Nov"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Dec"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "Last Year"
 msgstr ""
 
-#: includes/functions.php:576
+#: includes/functions.php:590
 msgid "This Year"
 msgstr ""
 
-#: includes/functions.php:577
+#: includes/functions.php:591
 msgid "Last Week"
 msgstr ""
 
-#: includes/functions.php:577
+#: includes/functions.php:591
 msgid "This Week"
 msgstr ""
 
-#: includes/functions.php:578
+#: includes/functions.php:592
 msgid "Last Month"
 msgstr ""
 
-#: includes/functions.php:578
+#: includes/functions.php:592
 msgid "This Month"
 msgstr ""
 
-#: includes/functions.php:579
+#: includes/functions.php:593
 msgid "No results available"
 msgstr ""
 

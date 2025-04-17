@@ -5,7 +5,7 @@ Tags: geodirectory, ga4, google analytics, geodirectory google analytics, tracki
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 2.3.5
+Stable tag: 2.3.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,7 +35,7 @@ Yes
 
 == Changelog ==
 
-= 2.3.6 - TBD =
+= 2.3.6 - 2025-04-17 =
 * Remove Universal Analytics support as UA properties has stopped processing data - CHANGED
 
 = 2.3.5 - 2024-12-11 =
