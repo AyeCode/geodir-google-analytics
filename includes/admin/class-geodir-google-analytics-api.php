@@ -323,8 +323,11 @@ class GeoDir_Google_Analytics_API {
 			return null;
 		}
 
-		$token = json_decode( $token, true );
-		$token = ! empty( $token['access_token'] ) ? $token['access_token'] : null;
+		if ( is_scalar( $token ) ) {
+			$token = json_decode( $token, true );
+		}
+
+		$token = is_array( $token ) && ! empty( $token['access_token'] ) ? $token['access_token'] : null;
 
 		return $token;
 	}

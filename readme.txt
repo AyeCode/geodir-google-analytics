@@ -35,6 +35,9 @@ Yes
 
 == Changelog ==
 
+= 2.3.7 - 2025-07-TBD =
+* Conflicts with Google library from other plugin on settings page - FIXED
+
 = 2.3.6 - 2025-04-17 =
 * Remove Universal Analytics support as UA properties has stopped processing data - CHANGED
 
