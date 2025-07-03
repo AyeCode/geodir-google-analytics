@@ -150,7 +150,7 @@ class GeoDir_Google_Analytics_API {
 		geodir_update_option( 'ga_data_stream', '' );
 		geodir_update_option( 'ga_profile_view', '' );
 
-		return $properties;
+		return $ga4_properties;
 	}
 
 	function get_ua_properties() {
