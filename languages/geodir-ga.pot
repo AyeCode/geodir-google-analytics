@@ -1,12 +1,12 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory Google Analytics 2.3.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-12 19:31+0530\n"
+"POT-Creation-Date: 2025-08-12 19:34+0530\n"
 "PO-Revision-Date: 2025-08-12 19:31+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
-"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,7 +17,8 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 3.5\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: includes/libraries/google-api-php-client\n"
+"X-Poedit-SearchPathExcluded-0: includes/libraries/google-api-php-"
+"client\n"
 
 #: includes/admin/admin-functions.php:26
 #: includes/admin/class-geodir-google-analytics-admin.php:94
@@ -28,8 +29,8 @@ msgstr ""
 
 #: includes/admin/admin-functions.php:27
 msgid ""
-"Check this box if you would like to completely remove all of its data when "
-"Google Analytics is deleted."
+"Check this box if you would like to completely remove all of its data "
+"when Google Analytics is deleted."
 msgstr ""
 
 #: includes/admin/admin-functions.php:47
@@ -58,7 +59,8 @@ msgid "Log In with your Google Analytics Account"
 msgstr ""
 
 #: includes/admin/admin-functions.php:58
-msgid "Log in with your Google Analytics account to select analytics profile."
+msgid ""
+"Log in with your Google Analytics account to select analytics profile."
 msgstr ""
 
 #: includes/admin/class-geodir-google-analytics-admin.php:95
@@ -71,15 +73,15 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:93
 msgid ""
-"<b>Google Analytics 4</b> has replaced <b>Universal Analytics</b>. Starting "
-"from July 1, 2024 all standard Universal Analytics properties has stopped "
-"processing data.<p class=\"mb-0\">If you are still using UA then it's "
-"critical that you migrate your Universal Analytics property settings to "
-"<b><a href=\"https://support.google.com/analytics/answer/10089681\" "
-"rel=\"noopener\" target=\"_blank\">Google Analytics 4</a></b>. <b><a "
-"href=\"https://support.google.com/analytics/answer/11583528\" "
-"rel=\"noopener\" target=\"_blank\">Learn how</a></b> to migrate from UA to "
-"GA4.</p>"
+"<b>Google Analytics 4</b> has replaced <b>Universal Analytics</b>. "
+"Starting from July 1, 2024 all standard Universal Analytics properties "
+"has stopped processing data.<p class=\"mb-0\">If you are still using "
+"UA then it's critical that you migrate your Universal Analytics "
+"property settings to <b><a href=\"https://support.google.com/analytics/"
+"answer/10089681\" rel=\"noopener\" target=\"_blank\">Google Analytics "
+"4</a></b>. <b><a href=\"https://support.google.com/analytics/"
+"answer/11583528\" rel=\"noopener\" target=\"_blank\">Learn how</a></b> "
+"to migrate from UA to GA4.</p>"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:96
@@ -133,7 +135,8 @@ msgid "Add tracking code to site?"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:128
-msgid "This will automatically add the correct tracking code to your site"
+msgid ""
+"This will automatically add the correct tracking code to your site"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:134
@@ -142,8 +145,8 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:135
 msgid ""
-"In most cases this is not required, this is to comply with certain country "
-"laws such as Germany."
+"In most cases this is not required, this is to comply with certain "
+"country laws such as Germany."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:142
@@ -152,8 +155,8 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:143
 msgid ""
-"If ticked it uses the auto refresh time below, if not it never refreshes "
-"unless the refresh button is clicked."
+"If ticked it uses the auto refresh time below, if not it never "
+"refreshes unless the refresh button is clicked."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:150
@@ -162,9 +165,9 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:151
 msgid ""
-"Time interval in seconds to auto refresh active users. The active users will "
-"be auto refreshed after this time interval. Leave blank or use 0(zero) to "
-"disable auto refresh. Default: 5"
+"Time interval in seconds to auto refresh active users. The active "
+"users will be auto refreshed after this time interval. Leave blank or "
+"use 0(zero) to disable auto refresh. Default: 5"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-analytics.php:210
@@ -210,8 +213,8 @@ msgstr ""
 
 #: includes/class-geodir-google-analytics.php:173
 msgid ""
-"GeoDirectory plugin is required for the GeoDirectory Google Analytics plugin "
-"to work properly."
+"GeoDirectory plugin is required for the GeoDirectory Google Analytics "
+"plugin to work properly."
 msgstr ""
 
 #: includes/class-geodir-google-analytics.php:220
@@ -232,7 +235,8 @@ msgstr ""
 
 #: includes/functions.php:240
 msgid ""
-"Not authorized, please click authorized in GD > Google Analytics settings."
+"Not authorized, please click authorized in GD > Google Analytics "
+"settings."
 msgstr ""
 
 #: includes/functions.php:258
@@ -469,7 +473,8 @@ msgid "Geographic Dimensions:"
 msgstr ""
 
 #: includes/widgets/class-geodir-google-analytics-widget-post-analytics.php:122
-msgid "Select geographic dimensions location level to display users count."
+msgid ""
+"Select geographic dimensions location level to display users count."
 msgstr ""
 
 #: includes/widgets/class-geodir-google-analytics-widget-post-analytics.php:124

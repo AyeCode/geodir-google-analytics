@@ -5,7 +5,7 @@ Tags: geodirectory, ga4, google analytics, geodirectory google analytics, tracki
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 2.3.7
+Stable tag: 2.3.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,7 +35,7 @@ Yes
 
 == Changelog ==
 
-= 2.3.8 - 2025-08-TBD =
+= 2.3.8 - 2025-08-12 =
 * Option added in widget to render output inline - ADDED
 * Option added to view stats for city level geographic dimensions - ADDED
 
