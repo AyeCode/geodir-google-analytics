@@ -533,7 +533,7 @@ class GeoDir_Google_Analytics_API {
 		$data_streams = array();
 
 		try {
-			$data_streams = $this->listPropertyDataStreams( array( 'propertyId' => $property_id, 'pageSize' => 1 ) );
+			$data_streams = $this->listPropertyDataStreams( array( 'propertyId' => $property_id, 'pageSize' => $limit ) );
 		} catch ( Google_ServiceException $e ) {
 			geodir_error_log( '[' . $e->getCode() . '] ' . $e->getMessage(), 'Analytics API Service Error', __FILE__, __LINE__ );
 		}
@@ -552,7 +552,7 @@ class GeoDir_Google_Analytics_API {
 			return $_data_stream;
 		}
 
-		$data_streams = $this->getDataStreams( $property_id, 1 );
+		$data_streams = $this->getDataStreams( $property_id );
 
 		if ( ! empty( $data_streams ) && ! is_wp_error( $data_streams ) && ! empty( $data_streams['dataStreams'] ) ) {
 			$data_stream = $data_streams['dataStreams'][0];
@@ -624,10 +624,10 @@ class GeoDir_Google_Analytics_API {
 					'dimensionName' => 'month'
 				)
 			);
-		} else if ( ! empty( $args['dimensions'] ) && $args['dimensions'] == 'country' ) {
+		} else if ( ! empty( $args['dimensions'] ) && ( $args['dimensions'] == 'country' || $args['dimensions'] == 'city' ) ) {
 			$dimensions = array(
 				array(
-					'name' => 'country'
+					'name' => $args['dimensions']
 				)
 			);
 		} else {
@@ -723,7 +723,7 @@ class GeoDir_Google_Analytics_API {
 				$endDate = '';
 			}
 
-			if ( $type == 'country' ) {
+			if ( $type == 'country' || $type == 'city' ) {
 				$data['rows'] = array();
 
 				if ( ! empty( $response['rows'] ) ) {

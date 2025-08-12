@@ -82,6 +82,17 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 				'default' => '200',
 				'advanced' => true
 			),
+			'output' => array(
+				'type' => 'select',
+				'title' => __( 'Output Type:', 'geodir-ga' ),
+				'desc' => __( 'Display type to render output.', 'geodir-ga' ),
+				'options' => array(
+					'' => __( 'Default (Button)','geodir-ga' ),
+					'inline' => __( 'Inline','geodir-ga' )
+				),
+				'default' => '',
+				'desc_tip' => true
+			),
 			'button_text' => array(
 				'title' => __( 'Button text:', 'geodir-ga' ),
 				'desc' => __( 'The text to use for the button to show the analytics:', 'geodir-ga' ),
@@ -89,7 +100,8 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 				'placeholder' => __( 'Show Google Analytics', 'geodir-ga' ),
 				'desc_tip' => true,
 				'default' => '',
-				'advanced' => true
+				'advanced' => true,
+				'element_require' => '[%output%]!="inline"'
 			),
 			'user_roles' => array(
 				'title' => __( 'Google Analytics visible to:', 'geodir-ga' ),
@@ -103,6 +115,18 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 				),
 				'desc_tip' => true,
 				'advanced' => false
+			),
+			'location_level' => array(
+				'type' => 'select',
+				'title' => __( 'Geographic Dimensions:', 'geodir-ga' ),
+				'desc' => __( 'Select geographic dimensions location level to display users count.', 'geodir-ga' ),
+				'options' => array(
+					'' => __( 'Default (Country & City)','geodir-ga' ),
+					'country' => __( 'Country','geodir-ga' ),
+					'city' => __( 'City','geodir-ga' )
+				),
+				'default' => '',
+				'desc_tip' => true
 			)
 		);
 
@@ -117,7 +141,8 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 				'default' => '',
 				'desc_tip' => true,
 				'advanced' => false,
-				'group' => __( 'Design', 'geodirectory' )
+				'group' => __( 'Design', 'geodirectory' ),
+				'element_require' => '[%output%]!="inline"'
 			);
 
 			$arguments['btn_size'] = array(
@@ -133,7 +158,8 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 				'default' => '',
 				'desc_tip' => true,
 				'advanced' => false,
-				'group' => __( 'Design', 'geodirectory' )
+				'group' => __( 'Design', 'geodirectory' ),
+				'element_require' => '[%output%]!="inline"'
 			);
 
 			$arguments['btn_alignment'] = array(
@@ -150,7 +176,8 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 				'default' => '',
 				'desc_tip' => true,
 				'advanced' => false,
-				'group' => __( 'Design', 'geodirectory' )
+				'group' => __( 'Design', 'geodirectory' ),
+				'element_require' => '[%output%]!="inline"'
 			);
 		}
 
@@ -181,8 +208,10 @@ class GeoDir_Google_Analytics_Widget_Post_Analytics extends WP_Super_Duper {
 		// options
 		$defaults = array(
 			'title' => '',
+			'output' => '',
 			'button_text' => '',
 			'user_roles' => array( 'owner', 'administrator' ),
+			'location_level' => '',
 			'height' => 200,
 			// AUI
 			'btn_color' => '',
