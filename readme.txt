@@ -2,14 +2,14 @@
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: geodirectory, ga4, google analytics, geodirectory google analytics, tracking
-Requires at least: 5.0
-Tested up to: 6.8
-Requires PHP: 5.6
-Stable tag: 2.3.8
+Requires at least: 6.0
+Tested up to: 7.1
+Requires PHP: 7.4
+Stable tag: 2.4.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Allows Google Analytics 4 tracking for the listings.
+Allows Google Analytics 4 (GA4) tracking for GeoDirectory listings and displays real-time traffic statistics to listing owners.
 
 == Description ==
 
@@ -34,6 +34,11 @@ Yes
 == Screenshots ==
 
 == Changelog ==
+
+ = 2.4.0 - 2026-09-10 =
+* Migrated API requests from bundled google-api-php-client to WordPress HTTP API - CHANGED
+* Added new stats views for Sessions, Top Traffic Sources, Devices, New vs Returning, and Engagement - CHANGED
+* Minimum PHP version raised to 7.4 - CHANGED
 
 = 2.3.8 - 2025-08-12 =
 * Option added in widget to render output inline - ADDED
