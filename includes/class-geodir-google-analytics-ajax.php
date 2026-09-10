@@ -33,7 +33,7 @@ class GeoDir_Google_Analytics_AJAX {
 		$ajax_events = array(
 			'ga_stats' => true,
 			'ga_deauthorize' => false,
-			'ga_callback' => false,
+			'ga_diagnostics' => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -106,46 +106,25 @@ class GeoDir_Google_Analytics_AJAX {
 
 		geodir_die();
 	}
-	
-	public static function ga_callback() {
-		if ( ! empty( $_REQUEST['code'] ) && current_user_can( 'manage_options' ) ) {
-			$oAuthURL = "https://www.googleapis.com/oauth2/v3/token?";
-			$code = "code=" . sanitize_text_field( $_REQUEST['code'] );
-			$grant_type = "&grant_type=authorization_code";
-			$redirect_uri = "&redirect_uri=" . admin_url( 'admin-ajax.php' ) . "?action=geodir_ga_callback";
-			$client_id = "&client_id=" . geodir_get_option( 'ga_client_id' );
-			$client_secret = "&client_secret=" . geodir_get_option( 'ga_client_secret' );
 
-			$auth_url = $oAuthURL . $code . $redirect_uri .  $grant_type . $client_id . $client_secret;
+	/**
+	 * Run and return the Google Analytics connection diagnostics.
+	 *
+	 * @since 2.4.0
+	 */
+	public static function ga_diagnostics() {
+		check_ajax_referer( 'gd_ga_diagnostics', '_wpnonce' );
 
-			$response = wp_remote_post( $auth_url, array( 'timeout' => 15 ) );
-
-			$error_msg =  __('Something went wrong','geodirectory');
-			if ( ! empty( $response['response']['code'] ) && $response['response']['code'] == 200 ) {
-				$parts = json_decode( $response['body'] );
-				if ( ! isset( $parts->access_token ) ) {
-					echo $error_msg . " - #1";
-					exit;
-				} else {
-					geodir_update_option( 'gd_ga_access_token', $parts->access_token );
-					geodir_update_option( 'gd_ga_refresh_token', $parts->refresh_token );
-					?><script>window.close();</script><?php
-				}
-			} elseif ( ! empty( $response['response']['code'] ) ) {
-				$parts = json_decode( $response['body'] );
-
-				if ( isset( $parts->error ) ) {
-					echo $parts->error . ": " . $parts->error_description;
-					exit;
-				} else {
-					echo $error_msg . " - #2";
-					exit;
-				}
-			} else {
-				echo $error_msg . " - #3";
-				exit;
-			}
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
 		}
+
+		if ( ! function_exists( 'geodir_ga_run_diagnostics' ) ) {
+			require_once( GEODIR_GA_PLUGIN_DIR . 'includes/admin/admin-functions.php' );
+		}
+
+		echo geodir_ga_render_diagnostics( geodir_ga_run_diagnostics() );
+
 		geodir_die();
 	}
 }

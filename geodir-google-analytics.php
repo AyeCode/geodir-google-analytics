@@ -10,10 +10,10 @@
  * @wordpress-plugin
  * Plugin Name:       GeoDirectory Google Analytics
  * Plugin URI:        https://wpgeodirectory.com/downloads/google-analytics/
- * Description:       Allows Google Analytics 4 tracking for the listings.
- * Version:           2.3.8
- * Requires at least: 5.0
- * Requires PHP:      5.6
+ * Description:       Allows Google Analytics 4 (GA4) tracking for GeoDirectory listings and displays real-time traffic statistics to listing owners.
+ * Version:           2.4.0
+ * Requires at least: 6.0
+ * Requires PHP:      7.4
  * Author:            AyeCode Ltd
  * Author URI:        https://ayecode.io
  * License:           GPLv3
@@ -31,7 +31,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 if ( !defined( 'GEODIR_GA_VERSION' ) ) {
-	define( 'GEODIR_GA_VERSION', '2.3.8' );
+	define( 'GEODIR_GA_VERSION', '2.4.0' );
 }
 
 if ( ! defined( 'GEODIR_GA_MIN_CORE' ) ) {
